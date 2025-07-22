@@ -83,45 +83,68 @@ document.addEventListener('DOMContentLoaded', function() {
     simulateProgress();
     
     // Check if video is already cached
-    if (heroVideo.readyState >= 4) {
-      // Video is already loaded (from cache likely)
-      setTimeout(hideLoadingScreen, 1500); // Still show loading briefly for UX
-    } else {
-      // Track real video loading progress when possible
-      heroVideo.addEventListener('progress', function() {
-        if (heroVideo.buffered.length > 0) {
-          const bufferedEnd = heroVideo.buffered.end(heroVideo.buffered.length - 1);
-          const duration = heroVideo.duration;
-          
-          if (duration > 0) {
-            // Calculate real progress and scale it to 75-100% range
-            let realProgress = (bufferedEnd / duration) * 100;
-            let scaledProgress = 75 + (realProgress * 0.25);
+    if (heroVideo) {
+      if (heroVideo.readyState >= 4) {
+        // Video is already loaded (from cache likely)
+        setTimeout(hideLoadingScreen, 1500); // Still show loading briefly for UX
+      } else {
+        // Track real video loading progress when possible
+        heroVideo.addEventListener('progress', function() {
+          if (heroVideo.buffered.length > 0) {
+            const bufferedEnd = heroVideo.buffered.end(heroVideo.buffered.length - 1);
+            const duration = heroVideo.duration;
             
-            updateProgressBar(scaledProgress);
-            
-            // If fully loaded
-            if (Math.abs(bufferedEnd - duration) < 0.1) {
-              updateProgressBar(100);
-              setTimeout(hideLoadingScreen, 500);
+            if (duration > 0) {
+              // Calculate real progress and scale it to 75-100% range
+              let realProgress = (bufferedEnd / duration) * 100;
+              let scaledProgress = 75 + (realProgress * 0.25);
+              
+              updateProgressBar(scaledProgress);
+              
+              // If fully loaded
+              if (Math.abs(bufferedEnd - duration) < 0.1) {
+                updateProgressBar(100);
+                setTimeout(hideLoadingScreen, 500);
+              }
             }
           }
+        });
+        
+        // Also listen for canplaythrough as a fallback
+        heroVideo.addEventListener('canplaythrough', function() {
+          updateProgressBar(100);
+          setTimeout(hideLoadingScreen, 800);
+        });
+        
+        // Add a safety timeout (15 seconds max)
+        setTimeout(() => {
+          if (document.body.classList.contains('is-loading')) {
+            updateProgressBar(100);
+            hideLoadingScreen();
+          }
+        }, 15000);
+      }
+    } else {
+      // No hero video on this page, complete loading with simulated progress to 100%
+      let fakeProgress = 75; // Start from where simulateProgress leaves off
+      const completeInterval = setInterval(() => {
+        fakeProgress += Math.random() * 5;
+        if (fakeProgress >= 100) {
+          fakeProgress = 100;
+          clearInterval(completeInterval);
+          updateProgressBar(100);
+          setTimeout(hideLoadingScreen, 500);
         }
-      });
+        updateProgressBar(fakeProgress);
+      }, 200);
       
-      // Also listen for canplaythrough as a fallback
-      heroVideo.addEventListener('canplaythrough', function() {
-        updateProgressBar(100);
-        setTimeout(hideLoadingScreen, 800);
-      });
-      
-      // Add a safety timeout (15 seconds max)
+      // Safety timeout
       setTimeout(() => {
         if (document.body.classList.contains('is-loading')) {
           updateProgressBar(100);
           hideLoadingScreen();
         }
-      }, 15000);
+      }, 5000);
     }
     
     // Hide loading screen and show content

@@ -1324,3 +1324,183 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// Initialize subscription functionality
+initSubscriptionModal();
+
+/**
+ * Initialize subscription modal functionality
+ */
+function initSubscriptionModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    const subscribeForm = document.getElementById('subscribe-form');
+    const subscribeCloseBtn = document.querySelector('.subscribe-close-btn');
+    
+    if (!subscribeModal || !subscribeForm) return;
+    
+    // Show modal after 5 seconds on first visit
+    const hasShownModal = sessionStorage.getItem('subscribeModalShown');
+    if (!hasShownModal) {
+        setTimeout(() => {
+            showSubscribeModal();
+        }, 5000);
+    }
+    
+    // Handle form submission
+    subscribeForm.addEventListener('submit', handleSubscribeSubmit);
+    
+    // Handle close button
+    if (subscribeCloseBtn) {
+        subscribeCloseBtn.addEventListener('click', () => {
+            hideSubscribeModal();
+        });
+    }
+    
+    // Handle modal close button
+    const modalCloseBtn = subscribeModal.querySelector('.modal-close');
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', () => {
+            hideSubscribeModal();
+        });
+    }
+    
+    // Close modal when clicking outside
+    subscribeModal.addEventListener('click', (e) => {
+        if (e.target === subscribeModal) {
+            hideSubscribeModal();
+        }
+    });
+}
+
+/**
+ * Show the subscription modal
+ */
+function showSubscribeModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    if (subscribeModal) {
+        subscribeModal.style.display = 'flex';
+        subscribeModal.classList.add('active');
+        document.body.classList.add('modal-open');
+        sessionStorage.setItem('subscribeModalShown', 'true');
+        
+        // Focus on first input
+        const firstInput = subscribeModal.querySelector('input[type="email"]');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
+    }
+}
+
+/**
+ * Hide the subscription modal
+ */
+function hideSubscribeModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    if (subscribeModal) {
+        subscribeModal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+        setTimeout(() => {
+            subscribeModal.style.display = 'none';
+        }, 300);
+    }
+}
+
+/**
+ * Handle subscription form submission
+ */
+async function handleSubscribeSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    
+    // Show loading state
+    form.classList.add('loading');
+    submitBtn.disabled = true;
+    
+    try {
+        // Validate email
+        const email = formData.get('email');
+        if (!email || !isValidEmail(email)) {
+            throw new Error('Please enter a valid email address');
+        }
+        
+        // Prepare data
+        const data = {
+            email: email,
+            name: formData.get('name') || null,
+            company: formData.get('company') || null,
+            role: formData.get('role') || null
+        };
+        
+        // Send to backend
+        const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            // Show success message
+            showSubscribeMessage('Thank you for subscribing! You\'ll receive our latest maritime insights soon.', 'success');
+            form.reset();
+            
+            // Hide modal after 2 seconds
+            setTimeout(() => {
+                hideSubscribeModal();
+            }, 2000);
+        } else {
+            throw new Error(result.message || 'Subscription failed. Please try again.');
+        }
+        
+    } catch (error) {
+        console.error('Subscription error:', error);
+        showSubscribeMessage(error.message || 'An error occurred. Please try again.', 'error');
+    } finally {
+        // Remove loading state
+        form.classList.remove('loading');
+        submitBtn.disabled = false;
+    }
+}
+
+/**
+ * Show subscription message
+ */
+function showSubscribeMessage(message, type) {
+    const form = document.getElementById('subscribe-form');
+    if (!form) return;
+    
+    // Remove existing messages
+    const existingMessage = form.querySelector('.subscribe-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `subscribe-message ${type}`;
+    messageDiv.textContent = message;
+    
+    // Insert at top of form
+    form.insertBefore(messageDiv, form.firstChild);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}

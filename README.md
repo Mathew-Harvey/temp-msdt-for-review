@@ -1,154 +1,188 @@
-# MarineStream™ Website
+# MarineStream™ - Integrated Biofouling & Asset Management
 
-A comprehensive website for MarineStream's integrated biofouling and underwater asset management platform.
+MarineStream™ provides a revolutionary integrated system for proactive biofouling management and underwater asset sustainment. We merge Australia's only regulatory-compliant in-water cleaning (IWC) technology with a state-of-the-art, blockchain-secured data platform.
 
-## 🚀 Features
+## Features
 
-### Core Functionality
-- **Interactive Biofouling Calculator** - University of Melbourne research-based hull fouling cost calculator
-- **BFMP Generator** - Comprehensive biofouling management plan generator compliant with IMO guidelines
-- **PDF Capability Statement** - Dynamic PDF generation with company information
-- **Video Showcase** - ROV inspection and cleaning demonstration videos
-- **Contact Form** - Integrated contact form with email fallback
+### Core System Components
+- **MarineStream™ Management Platform**: Blockchain-secured data platform with integrated workflows
+- **Compliant In-Water Cleaning System**: Australian IWCS compliant cleaning technology
+- **AI-Powered Analytics**: Real-time insights and predictive maintenance
+- **Regulatory Compliance**: Built-in compliance with international maritime standards
 
-### Technical Features
-- **Responsive Design** - Mobile-first approach with touch-optimized interfaces
-- **Accessibility** - WCAG 2.1 AA compliant with keyboard navigation and screen reader support
-- **Performance Optimized** - Lazy loading, preloading, and efficient resource management
-- **Modal System** - Complex modal interactions with proper focus management
-- **Iframe Integration** - Seamless calculator integration via iframe communication
+### Website Features
+- **Dynamic Email Collection**: Popup subscription modal with backend storage
+- **Blog System**: Markdown-based blog with API-driven content
+- **Privacy Policy**: Dynamic privacy policy page
+- **Sales Tools**: Hull calculator and BFMP generator
+- **Responsive Design**: Mobile-first, accessible design
 
-## 📁 Project Structure
+## Quick Start
 
-```
-temp-msdt-for-review/
-├── index.html              # Main website page
-├── style.css              # Main stylesheet with responsive design
-├── script.js              # Core JavaScript functionality
-├── loading-screen.css     # Loading screen styles
-├── loading-screen.js      # Loading screen functionality
-├── hullCalc.html          # Hull calculator iframe page
-├── hullCalc.js            # Calculator logic and charts
-├── bfmpGen.html           # BFMP generator modal
-├── bfmpGen.js             # BFMP generation logic
-├── bfmpGen.css            # BFMP generator styles
-├── capStat.js             # Capability statement PDF generator
-├── thanks.html            # Thank you page
-├── assets/                # Images, videos, and media files
-├── results/               # Generated reports and documents
-└── README.md              # This documentation
-```
+### Prerequisites
+- Node.js 22.5.0+ (required for built-in SQLite support)
+- npm or yarn
 
-## 🛠️ Development Guidelines
-
-### Code Organization
-- **Modular Structure** - Each feature has its own files (HTML, CSS, JS)
-- **Event-Driven Architecture** - Clean separation of concerns
-- **Defensive Programming** - Multiple fallbacks ensure reliability
-- **Debug Logging** - Comprehensive console logging for troubleshooting
-
-### Performance Considerations
-- **Lazy Loading** - Images load only when needed
-- **Preloading** - Critical resources preloaded for better UX
-- **Async Script Loading** - Non-critical scripts loaded asynchronously
-- **Efficient DOM Queries** - Cached selectors and event delegation
-
-### Accessibility Features
-- **ARIA Labels** - Comprehensive screen reader support
-- **Keyboard Navigation** - Full keyboard accessibility
-- **Focus Management** - Proper focus trapping in modals
-- **Skip Links** - Quick navigation for assistive technology
-- **Color Contrast** - WCAG compliant color schemes
-
-## 🔧 Key Components
-
-### Modal System
-The website uses a sophisticated modal system with:
-- **State Management** - Proper show/hide states
-- **Focus Trapping** - Keyboard navigation within modals
-- **Escape Key Support** - Close modals with Escape key
-- **Click Outside** - Close modals by clicking outside content
-
-### Form Handling
-- **Validation** - Client-side and server-side validation
-- **Error Handling** - Graceful error handling with user feedback
-- **File Upload** - Image upload with preview functionality
-- **Email Integration** - FormSubmit.co integration with fallback
-
-### PDF Generation
-- **Dynamic Content** - Handlebars templating for dynamic PDFs
-- **Multiple Formats** - HTML, PDF, and print-friendly versions
-- **Error Handling** - Fallback options if PDF generation fails
-- **Responsive Design** - Print-optimized layouts
-
-## 🚀 Getting Started
+### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone [repository-url]
+   git clone <repository-url>
    cd temp-msdt-for-review
    ```
 
-2. **Serve the website**
+2. **Install server dependencies**
    ```bash
-   python -m http.server 8000
-   # or
-   npx serve .
+   cd server
+   npm install
    ```
 
-3. **Open in browser**
+   **Note:** This project uses Node.js 22.5.0+ built-in SQLite module, which requires the `--experimental-sqlite` flag. No additional database dependencies are needed.
+
+3. **Start the development server**
+   ```bash
+   npm start
+   # or for development with auto-restart
+   npm run dev
    ```
-   http://localhost:8000
+   
+   The server will start with the `--experimental-sqlite` flag automatically.
+
+4. **Access the application**
+   - Frontend: http://localhost:3000
+   - API: http://localhost:3000/api
+
+## Project Structure
+
+```
+MarineStream/
+├── assets/                 # Images, videos, and static assets
+├── blog/                   # Markdown blog posts
+├── content/                # Static content (privacy policy)
+├── server/                 # Backend server
+│   ├── server.js          # Express server with API endpoints
+│   ├── package.json       # Server dependencies
+│   └── data.db           # SQLite database (auto-created)
+├── index.html             # Main landing page
+├── blog.html              # Blog page
+├── privacy.html           # Privacy policy page
+├── sales.html             # Sales page
+├── style.css              # Main stylesheet
+├── script.js              # Main JavaScript
+├── blog.js                # Blog functionality
+├── privacy.js             # Privacy page functionality
+└── README.md              # This file
+```
+
+## API Endpoints
+
+### Email Subscription
+- `POST /api/subscribe` - Subscribe to newsletter
+- `GET /api/export` - Export leads (JSON/CSV)
+
+### Content
+- `GET /api/blog` - Get blog posts
+- `GET /api/privacy` - Get privacy policy content
+- `GET /api/health` - Health check
+
+## Database Schema
+
+### Leads Table
+```sql
+CREATE TABLE leads (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  name TEXT,
+  company TEXT,
+  role TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Development
+
+### Adding Blog Posts
+1. Create a new `.md` file in the `blog/` directory
+2. Use standard Markdown syntax
+3. The first `#` heading becomes the post title
+4. Posts are automatically sorted by creation date
+
+### Customizing the Privacy Policy
+1. Edit `content/privacy.md`
+2. Changes are automatically reflected on the privacy page
+
+### Styling
+- Main styles: `style.css`
+- Component-specific styles are included in the main stylesheet
+- Uses CSS custom properties for theming
+
+## Deployment
+
+### Local Development
+```bash
+cd server
+npm start
+```
+
+### Production Deployment
+1. Set up a production server (VPS, cloud platform)
+2. Install Node.js and dependencies
+3. Use PM2 for process management:
+   ```bash
+   npm install -g pm2
+   pm2 start server.js --name marinestream
+   pm2 startup
    ```
 
-## 📱 Browser Support
+### Environment Variables
+- `PORT` - Server port (default: 3000)
+- `NODE_ENV` - Environment (development/production)
 
-- **Chrome** 90+
-- **Firefox** 88+
-- **Safari** 14+
-- **Edge** 90+
-- **Mobile browsers** - iOS Safari, Chrome Mobile
+## CRM Integration
 
-## 🔍 Performance Metrics
+### Export Leads
+```bash
+# JSON format
+curl http://localhost:3000/api/export
 
-- **First Contentful Paint**: < 1.5s
-- **Largest Contentful Paint**: < 2.5s
-- **Cumulative Layout Shift**: < 0.1
-- **First Input Delay**: < 100ms
+# CSV format
+curl http://localhost:3000/api/export?format=csv
+```
 
-## 🛡️ Security
+### Future CRM Integration
+- Manual export and import to CRM systems
+- Automated API integration with SuiteCRM/EspoCRM
+- Scheduled data synchronization
 
-- **Content Security Policy** - Restricts resource loading
-- **XSS Protection** - Input sanitization and validation
-- **CSRF Protection** - Form submission security
-- **HTTPS Only** - Secure connections required
+## Security Features
 
-## 📈 Analytics & Monitoring
+- Email validation and spam prevention
+- SQL injection protection
+- CORS configuration
+- Input sanitization
+- Rate limiting (basic)
 
-- **Error Tracking** - Console error logging
-- **Performance Monitoring** - Resource loading metrics
-- **User Interaction** - Form submission tracking
-- **Accessibility Testing** - Automated a11y checks
+## Browser Support
 
-## 🤝 Contributing
+- Chrome 80+
+- Firefox 75+
+- Safari 13+
+- Edge 80+
 
-1. **Fork the repository**
-2. **Create a feature branch**
-3. **Make your changes**
-4. **Test thoroughly**
-5. **Submit a pull request**
+## Contributing
 
-## 📄 License
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-© 2025 MarineStream. All rights reserved. | A division of [franmarine.com.au](https://franmarine.com.au)
+## License
 
-## 📞 Support
+© 2024 MarineStream Pty Ltd. All rights reserved.
 
-For technical support or questions about the website:
-- **Email**: mharvey@marinestream.com.au
-- **Phone**: +61 8 9437 3900
-- **Address**: 13 Possner Way, Henderson, WA 6166, Australia
+## Support
 
----
-
-*This documentation is maintained by the MarineStream Development Team.*
+For technical support or questions:
+- Email: info@marinestream.com.au
+- Website: https://www.marinestream.com.au

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="orange">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarineStream Blog - Maritime Insights & Industry Updates</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/marinestream_logo_white.png" as="image">
+    <link rel="preload" href="/style.css" as="style">
+    <link rel="preload" href="/script.js" as="script">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Meta Tags for Link Previews -->
+    <meta name="description"
+        content="Stay updated with the latest insights on biofouling management, maritime technology, and industry trends from MarineStream experts.">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="MarineStream Blog - Maritime Insights & Industry Updates" />
+    <meta property="og:description"
+        content="Expert insights on biofouling management, maritime technology, and industry trends from MarineStream." />
+    <meta property="og:image" content="https://www.marinestream.com.au/assets/socialmedialogo.png" />
+    <meta property="og:url" content="https://www.marinestream.com.au/blog.html" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MarineStream Blog - Maritime Insights & Industry Updates" />
+    <meta name="twitter:description"
+        content="Expert insights on biofouling management, maritime technology, and industry trends." />
+    <meta name="twitter:image" content="https://www.marinestream.com.au/assets/socialmedialogo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    
+    <!-- Critical CSS loaded synchronously -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/loading-screen.css">
+    <link rel="stylesheet" href="/blog.css">
+    
+    <!-- Non-critical scripts loaded asynchronously -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Critical scripts loaded synchronously -->
+    <script src="/script.js" defer></script>
+    <script src="/blog.js" defer></script>
+</head>
+
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="loading-screen">
+        <div class="loading-content">
+            <img src="/assets/marinestream_logo_white.png" alt="MarineStream Logo" class="loading-logo">
+            <div class="loading-spinner"></div>
+            <div class="loading-message">Loading maritime insights...</div>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header" role="banner">
+        <div class="container">
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <a href="./index.html" class="logo" aria-label="MarineStream Home">
+                    <img src="/assets/marinestream_logo_white.png" alt="MarineStream Logo - White" class="logo-img">
+                </a>
+                <div class="nav-links-container">
+                    <ul class="nav-links" role="menubar">
+                        <li role="none"><a href="./index.html#home" class="nav-link" role="menuitem">Home</a></li>
+                        <li role="none"><a href="./index.html#about" class="nav-link" role="menuitem">About</a></li>
+                        <li role="none"><a href="./index.html#dashboard-preview" class="nav-link" role="menuitem">Solutions</a></li>
+                        <li role="none"><a href="./sales.html" class="nav-link" role="menuitem">Sales</a></li>
+                        <li role="none"><a href="./index.html#tools" class="nav-link" role="menuitem">Tools</a></li>
+                        <li role="none"><a href="./blog.html" class="nav-link active" role="menuitem" aria-current="page">Blog</a></li>
+                        <li role="none"><a href="https://app.marinestream.io/marinestream" class="nav-link btn btn-primary"
+                                target="_blank" rel="noopener noreferrer" role="menuitem">Get Started</a></li>
+                    </ul>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links-container">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        <!-- Blog Hero Section -->
+        <section class="blog-hero">
+            <div class="container">
+                <div class="blog-hero-content">
+                    <h1>MarineStream Blog</h1>
+                    <p class="blog-hero-subtitle">Expert insights on biofouling management, maritime technology, and industry trends</p>
+                    <div class="blog-hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="blog-count">0</span>
+                            <span class="stat-label">Articles</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">2024</span>
+                            <span class="stat-label">Latest</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Content Section -->
+        <section class="blog-content">
+            <div class="container">
+                <!-- Loading State -->
+                <div id="blog-loading" class="blog-loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading articles...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="blog-error" class="blog-error" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Unable to Load Articles</h3>
+                    <p>We're experiencing technical difficulties. Please try again later.</p>
+                    <button class="btn btn-primary" onclick="loadBlogPosts()">
+                        <i class="fas fa-refresh"></i> Try Again
+                    </button>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div id="blog-posts" class="blog-posts-grid" style="display: none;">
+                    <!-- Blog posts will be dynamically loaded here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="blog-empty" class="blog-empty" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>No Articles Available</h3>
+                    <p>Check back soon for the latest maritime insights and industry updates.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup Section -->
+        <section class="newsletter-signup">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h2>Stay Updated</h2>
+                    <p>Get the latest maritime insights, industry updates, and technical articles delivered to your inbox.</p>
+                    <button class="btn btn-primary" onclick="showSubscribeModal()">
+                        <i class="fas fa-paper-plane"></i> Subscribe to Newsletter
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="/assets/marinestream_logo_white.png" alt="MarineStream Logo">
+                        <span>MarineStream™</span>
+                    </div>
+                    <p>Streamlining biofouling management with AI-powered solutions and sustainable cleaning technology.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="./index.html#home">Home</a></li>
+                        <li><a href="./index.html#about">About</a></li>
+                        <li><a href="./sales.html">Sales</a></li>
+                        <li><a href="./blog.html">Blog</a></li>
+                        <li><a href="./privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Tools</h3>
+                    <ul>
+                        <li><a href="./hullCalc.html">Hull Calculator</a></li>
+                        <li><a href="./bfmpGen.html">BFMP Generator</a></li>
+                        <li><a href="./capStat.js">Capacity Statistics</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:info@marinestream.com.au">info@marinestream.com.au</a></li>
+                        <li><a href="https://app.marinestream.io/marinestream" target="_blank">Get Started</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 MarineStream Pty Ltd. All rights reserved. | <a href="./privacy.html">Privacy Policy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Email Subscription Modal -->
+    <div id="subscribe-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope"></i> Stay Updated with MarineStream</h2>
+                <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="subscribe-content">
+                    <div class="subscribe-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Get the Latest Maritime Insights</h3>
+                    <p>Subscribe to our newsletter for industry updates, technical insights, and exclusive content about biofouling management and maritime asset optimization.</p>
+                    
+                    <form id="subscribe-form" class="subscribe-form">
+                        <div class="form-group">
+                            <label for="subscribe-email">Email Address *</label>
+                            <input type="email" id="subscribe-email" name="email" required 
+                                   placeholder="your.email@company.com" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subscribe-name">Full Name</label>
+                            <input type="text" id="subscribe-name" name="name" 
+                                   placeholder="Your full name" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subscribe-company">Company</label>
+                            <input type="text" id="subscribe-company" name="company" 
+                                   placeholder="Your company name" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subscribe-role">Role</label>
+                            <select id="subscribe-role" name="role" class="form-control">
+                                <option value="">Select your role</option>
+                                <option value="Fleet Manager">Fleet Manager</option>
+                                <option value="Technical Manager">Technical Manager</option>
+                                <option value="Operations Manager">Operations Manager</option>
+                                <option value="Marine Superintendent">Marine Superintendent</option>
+                                <option value="Port Manager">Port Manager</option>
+                                <option value="Consultant">Consultant</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="subscribe-consent" required>
+                                <span class="checkmark"></span>
+                                I agree to receive email updates from MarineStream. You can unsubscribe at any time.
+                            </label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Subscribe Now
+                            </button>
+                            <button type="button" class="btn btn-secondary subscribe-close-btn">
+                                Maybe Later
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/loading-screen.js"></script>
+</body>
+
+</html>
