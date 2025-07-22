@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="orange">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarineStream™ - Sales & Solutions</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./assets/marinestream_logo_white.png" as="image">
+    <link rel="preload" href="./style.css" as="style">
+    <link rel="preload" href="./sales.css" as="style">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon.ico">
+    <link rel="manifest" href="./assets/favicon/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Meta Tags for Link Previews -->
+    <meta name="description"
+        content="Explore MarineStream™ solutions - professional biofouling management, ROV systems, cleaning equipment, and consultation services for maritime operations.">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="MarineStream™ - Sales & Solutions" />
+    <meta property="og:description"
+        content="Discover MarineStream™ solutions - professional biofouling management, ROV systems, cleaning equipment, and consultation services." />
+    <meta property="og:image" content="https://www.marinestream.com.au/assets/socialmedialogo.png" />
+    <meta property="og:url" content="https://www.marinestream.com.au/sales.html" />
+    <meta property="og:type" content="website" />
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MarineStream™ - Sales & Solutions" />
+    <meta name="twitter:description"
+        content="Discover MarineStream™ solutions - professional biofouling management, ROV systems, cleaning equipment, and consultation services." />
+    <meta name="twitter:image" content="https://www.marinestream.com.au/assets/socialmedialogo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    
+    <!-- Critical CSS loaded synchronously -->
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./sales.css">
+    
+    <!-- Non-critical scripts loaded asynchronously -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+    
+    <!-- Critical scripts loaded synchronously -->
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Main Header (same as index.html) -->
+    <header class="main-header" role="banner">
+        <div class="container">
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <a href="./index.html" class="logo" aria-label="MarineStream Home">
+                    <img src="./assets/marinestream_logo_white.png" alt="MarineStream Logo - White" class="logo-img">
+                </a>
+                <div class="nav-links-container">
+                    <ul class="nav-links" role="menubar">
+                        <li role="none"><a href="./index.html#home" class="nav-link" role="menuitem">Home</a></li>
+                        <li role="none"><a href="./index.html#about" class="nav-link" role="menuitem">About</a></li>
+                        <li role="none"><a href="./index.html#dashboard-preview" class="nav-link" role="menuitem">Solutions</a></li>
+                        <li role="none"><a href="./sales.html" class="nav-link active" role="menuitem" aria-current="page">Sales</a></li>
+                        <li role="none"><a href="./index.html#tools" class="nav-link" role="menuitem">Tools</a></li>
+                        <li role="none"><a href="https://app.marinestream.io/marinestream" class="nav-link btn btn-primary"
+                                target="_blank" rel="noopener noreferrer" role="menuitem">Get Started</a></li>
+                    </ul>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links-container">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Ocean Background -->
+    <div class="ocean-bg">
+        <div class="wave"></div>
+    </div>
+
+    <!-- Sales Page Progress Header -->
+    <div class="sales-progress-header">
+        <div class="container">
+            <div class="journey-progress">
+                <span>Your Journey Progress</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Journey Container -->
+    <div class="journey-container" id="main-content">
+        <!-- Journey Map -->
+        <div class="journey-map">
+            <div class="map-header">
+                <h1>Navigate Your MarineStream Solution</h1>
+                <p>Let's chart a course to your perfect maritime service package</p>
+            </div>
+
+            <div class="journey-steps" id="journeySteps">
+                <!-- Step 1: Main Category -->
+                <div class="step" id="step1">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">
+                            <h2>What brings you to MarineStream today?</h2>
+                            <p>Select your primary need to begin your journey</p>
+                        </div>
+                    </div>
+                    <div class="choices-grid">
+                        <div class="choice-card">
+                            <div class="choice-card-body">
+                                <div class="choice-media media-service">
+                                    <i class="fas fa-ship"></i>
+                                </div>
+                                <div class="choice-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <h3 class="choice-title">Service Solutions</h3>
+                                <p class="choice-description">Professional biofouling management and engineering services for your fleet</p>
+                                <ul class="choice-features">
+                                    <li>Hull inspections & cleaning</li>
+                                    <li>Biofouling management plans</li>
+                                    <li>Compliance documentation</li>
+                                </ul>
+                                <p class="choice-price">From $5,000</p>
+                                <div class="choice-actions">
+                                    <button class="btn-learn-more" onclick="showDetails('service')">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                    <button class="btn-select" onclick="selectChoice('service', 'Service Solutions', '$5,000 - $50,000')">
+                                        Select <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="choice-card">
+                            <div class="choice-card-body">
+                                <div class="choice-media media-rov">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="choice-icon">
+                                    <i class="fas fa-anchor"></i>
+                                </div>
+                                <h3 class="choice-title">Equipment & Products</h3>
+                                <p class="choice-description">Advanced ROVs, cleaning systems, and marine technology</p>
+                                <ul class="choice-features">
+                                    <li>ROV systems (Revolution, Pivot, Photon)</li>
+                                    <li>Crawler cleaning systems</li>
+                                    <li>Filtration equipment</li>
+                                </ul>
+                                <p class="choice-price">From $10,000</p>
+                                <div class="choice-actions">
+                                    <button class="btn-learn-more" onclick="showDetails('product')">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                    <button class="btn-select" onclick="selectChoice('product', 'Equipment & Products', '$10,000 - $200,000')">
+                                        Select <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="choice-card">
+                            <div class="choice-card-body">
+                                <div class="choice-media media-filter">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <div class="choice-icon">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <h3 class="choice-title">Servicing & Maintenance</h3>
+                                <p class="choice-description">Keep your marine equipment operating at peak performance</p>
+                                <ul class="choice-features">
+                                    <li>Scheduled maintenance programs</li>
+                                    <li>Emergency repairs</li>
+                                    <li>Certification renewals</li>
+                                </ul>
+                                <p class="choice-price">From $2,000</p>
+                                <div class="choice-actions">
+                                    <button class="btn-learn-more" onclick="showDetails('maintenance')">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                    <button class="btn-select" onclick="selectChoice('maintenance', 'Servicing & Maintenance', '$2,000 - $20,000')">
+                                        Select <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="choice-card">
+                            <div class="choice-card-body">
+                                <div class="choice-media media-software">
+                                    <i class="fas fa-compass"></i>
+                                </div>
+                                <div class="choice-icon">
+                                    <i class="fas fa-compass"></i>
+                                </div>
+                                <h3 class="choice-title">Consultation & Other</h3>
+                                <p class="choice-description">Custom solutions and expert maritime consultation</p>
+                                <ul class="choice-features">
+                                    <li>Regulatory compliance consulting</li>
+                                    <li>Custom engineering solutions</li>
+                                    <li>Training programs</li>
+                                </ul>
+                                <p class="choice-price">Custom Quote</p>
+                                <div class="choice-actions">
+                                    <button class="btn-learn-more" onclick="showDetails('other')">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                    <button class="btn-select" onclick="selectChoice('other', 'Consultation & Other', 'Custom Quote')">
+                                        Select <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voyage Summary Sidebar -->
+        <aside class="voyage-summary">
+            <div class="summary-header">
+                <div class="ship-icon">
+                    <i class="fas fa-ship"></i>
+                </div>
+                <h3>Your Voyage Summary</h3>
+                <p>Building your custom solution</p>
+            </div>
+
+            <div class="summary-items" id="summaryItems">
+                <!-- Selected items will appear here -->
+            </div>
+
+            <div class="summary-total">
+                <div class="total-row">
+                    <span class="total-label">Estimated Range:</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-value" id="totalRange">$0</span>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h4>Ready to Set Sail?</h4>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Additional Details</label>
+                        <textarea id="message" name="message" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Request Detailed Quote
+                    </button>
+                </form>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots">
+        <div class="nav-dot active" data-step="Category"></div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Charting your course...</p>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Service Details</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="footer-logo">
+                        <img src="./assets/logo.png" alt="MarineStream Logo - Footer">
+                    </a>
+                    <p>Revolutionising Biofouling Management with blockchain technology and live underwater monitoring.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="./index.html#home">Home</a></li>
+                        <li><a href="./index.html#about">About</a></li>
+                        <li><a href="./index.html#dashboard-preview">Solutions</a></li>
+                        <li><a href="./index.html#tools">Tools</a></li>
+                        <li><a href="./index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <!-- <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookies Policy</a></li>
+                    </ul> -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 MarineStream. All rights reserved. | A division of <a href="https://franmarine.com.au"
+                        target="_blank" rel="noopener noreferrer">franmarine.com.au</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./sales.js"></script>
+</body>
+
+</html>
