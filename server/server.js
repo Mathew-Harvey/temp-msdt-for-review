@@ -125,24 +125,49 @@ app.get('/api/blog', async (req, res) => {
     const blogPosts = [];
     for (const file of markdownFiles) {
       const content = await fs.readFile(path.join(blogDir, file), 'utf8');
-      const html = marked(content);
-
-      // Extract title from first h1 or filename
+      
+      // Extract metadata from markdown content
       const titleMatch = content.match(/^#\s+(.+)$/m);
       const title = titleMatch ? titleMatch[1] : file.replace('.md', '');
-
+      
+      // Extract publication date from markdown content
+      const dateMatch = content.match(/\*Published:\s*([^*]+)\*/);
+      const publishedDate = dateMatch ? dateMatch[1].trim() : null;
+      
+      // Extract excerpt (first paragraph after title)
+      const excerptMatch = content.match(/^#\s+.+?\n\n(.+?)(?=\n\n|\n#|$)/s);
+      const excerpt = excerptMatch ? excerptMatch[1].replace(/\*Published:[^*]*\*/, '').trim() : '';
+      
+      // Convert markdown to HTML for full content
+      const html = marked(content);
+      
+      // Create excerpt HTML (first paragraph only)
+      const excerptHtml = excerpt ? marked(excerpt) : '';
+      
+      // Get file stats for creation date
+      const filePath = path.join(blogDir, file);
+      const stats = await fs.stat(filePath);
+      
       blogPosts.push({
         id: file.replace('.md', ''),
         title,
+        excerpt: excerptHtml,
         content: html,
         filename: file,
-        created_at: new Date().toISOString()
+        published_date: publishedDate,
+        created_at: stats.birthtime.toISOString(),
+        modified_at: stats.mtime.toISOString()
       });
     }
 
     res.json({
       success: true,
-      posts: blogPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      posts: blogPosts.sort((a, b) => {
+        // Sort by published date if available, otherwise by creation date
+        const dateA = a.published_date ? new Date(a.published_date) : new Date(a.created_at);
+        const dateB = b.published_date ? new Date(b.published_date) : new Date(b.created_at);
+        return dateB - dateA;
+      })
     });
 
   } catch (error) {
@@ -150,6 +175,61 @@ app.get('/api/blog', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error loading blog content'
+    });
+  }
+});
+
+// Individual blog post endpoint
+app.get('/api/blog/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blogDir = path.join(__dirname, '../blog');
+    const filePath = path.join(blogDir, `${id}.md`);
+    
+    // Check if file exists
+    try {
+      await fs.access(filePath);
+    } catch (error) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog post not found'
+      });
+    }
+    
+    const content = await fs.readFile(filePath, 'utf8');
+    
+    // Extract metadata from markdown content
+    const titleMatch = content.match(/^#\s+(.+)$/m);
+    const title = titleMatch ? titleMatch[1] : id;
+    
+    // Extract publication date from markdown content
+    const dateMatch = content.match(/\*Published:\s*([^*]+)\*/);
+    const publishedDate = dateMatch ? dateMatch[1].trim() : null;
+    
+    // Convert markdown to HTML
+    const html = marked(content);
+    
+    // Get file stats
+    const stats = await fs.stat(filePath);
+    
+    res.json({
+      success: true,
+      post: {
+        id,
+        title,
+        content: html,
+        filename: `${id}.md`,
+        published_date: publishedDate,
+        created_at: stats.birthtime.toISOString(),
+        modified_at: stats.mtime.toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Blog post error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error loading blog post'
     });
   }
 });

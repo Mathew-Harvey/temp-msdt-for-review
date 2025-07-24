@@ -353,9 +353,6 @@ function selectChoice(id, title, price) {
     // Update summary
     updateSummary();
     
-    // Update progress
-    updateProgress();
-    
     // Load next step
     setTimeout(() => {
         loadNextStep(id);
@@ -863,14 +860,7 @@ function updateSummary() {
     }
 }
 
-function updateProgress() {
-    // Calculate progress based on current step and total possible steps
-    // Most journeys will have 3-4 steps, so we'll use 4 as the maximum
-    const maxSteps = 4;
-    const progress = Math.min((journeyState.currentStep / maxSteps) * 100, 100);
-    document.getElementById('progressFill').style.width = `${progress}%`;
-    document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
-}
+
 
 function addNavDot() {
     const navDots = document.getElementById('navDots');
@@ -917,5 +907,4 @@ document.getElementById('detailModal').addEventListener('click', function(e) {
     }
 });
 
-// Initialize
-updateProgress();
+
