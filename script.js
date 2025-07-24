@@ -15,6 +15,30 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Safety: Remove any stuck modal-open class on page load
+    document.body.classList.remove('modal-open');
+    document.body.classList.remove('mobile-menu-open');
+    
+    // Force enable scrolling
+    document.body.style.overflow = '';
+    document.body.style.overflowX = 'hidden';
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.overflowX = 'hidden';
+    
+    // Ensure mobile menu is closed
+    const navLinksContainer = document.querySelector('.nav-links-container');
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    if (navLinksContainer) {
+        navLinksContainer.classList.remove('active');
+    }
+    if (mobileMenuToggle) {
+        mobileMenuToggle.classList.remove('active');
+        const icon = mobileMenuToggle.querySelector('i');
+        if (icon) {
+            icon.className = 'fas fa-bars';
+        }
+    }
+    
     // Initialize core website functionality
     initWebsiteFunctions(); // Includes theme toggles, nav, etc.
 
@@ -41,7 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             modalElement.classList.remove('active');
             // Only remove body class if no other modals are active
-            if (!document.querySelector('.modal-overlay.active')) {
+            const activeModals = document.querySelectorAll('.modal-overlay.active');
+            if (activeModals.length === 0) {
                 document.body.classList.remove('modal-open');
             }
         }
@@ -195,30 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             observer.observe(modal, { attributes: true });
         });
 
-        // Skip to main content link
-        const skipLink = document.createElement('a');
-        skipLink.href = '#main-content';
-        skipLink.textContent = 'Skip to main content';
-        skipLink.className = 'skip-link';
-        skipLink.style.cssText = `
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            z-index: 10000;
-            color: white;
-            background: #FF6600;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-        `;
-        skipLink.addEventListener('focus', function() {
-            this.style.top = '6px';
-        });
-        skipLink.addEventListener('blur', function() {
-            this.style.top = '-40px';
-        });
-        document.body.insertBefore(skipLink, document.body.firstChild);
+
 
         // Add main content landmark
         const mainElement = document.querySelector('main');
