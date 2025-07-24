@@ -49,30 +49,7 @@ const productTemplates = {
             }
         ]
     },
-    biofouling: {
-        title: "Biofouling Management Services",
-        intro: "MarineStream offers comprehensive biofouling management solutions aligned with IMO guidelines and Australian biosecurity regulations.",
-        services: [
-            {
-                name: "Hull Inspection Services",
-                desc: "Professional underwater inspections using ROVs and certified divers",
-                includes: ["HD video documentation", "Biofouling assessment report", "Compliance certification"],
-                caseStudy: "Recently completed inspection of 50+ vessel fleet for major shipping company"
-            },
-            {
-                name: "In-Water Cleaning",
-                desc: "Environmentally compliant cleaning with full capture and filtration",
-                includes: ["10μ filtration system", "Niche area cleaning", "Waste disposal certification"],
-                caseStudy: "Cleaned 200m cruise ship in port with zero environmental impact"
-            },
-            {
-                name: "Management Programs",
-                desc: "Complete biofouling management plans and ongoing support",
-                includes: ["Digital record keeping", "Regulatory compliance", "Performance monitoring"],
-                caseStudy: "Managing biofouling for Australia's naval fleet"
-            }
-        ]
-    }
+
 };
 
 // Show Details Modal
@@ -83,43 +60,7 @@ function showDetails(category) {
     
     let content = '';
     
-    if (category === 'service') {
-        modalTitle.textContent = 'Service Solutions Overview';
-        content = `
-            <div class="content-section">
-                <h3>Comprehensive Maritime Services</h3>
-                <p>MarineStream provides end-to-end biofouling management and marine engineering services to keep your fleet operating at peak efficiency while maintaining regulatory compliance.</p>
-                
-                <div class="video-container">
-                    <div class="video-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                    </div>
-                </div>
-                
-                <h3>Our Service Categories</h3>
-                <div class="case-studies">
-                    <div class="case-study-card">
-                        <div class="case-study-image">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <div class="case-study-content">
-                            <h4 class="case-study-title">Biofouling Management</h4>
-                            <p class="case-study-description">Complete biofouling control from inspection to cleaning, ensuring IMO compliance and optimal vessel performance.</p>
-                        </div>
-                    </div>
-                    <div class="case-study-card">
-                        <div class="case-study-image">
-                            <i class="fas fa-cog"></i>
-                        </div>
-                        <div class="case-study-content">
-                            <h4 class="case-study-title">Engineering Services</h4>
-                            <p class="case-study-description">Technical inspections, underwater repairs, and structural assessments by certified marine engineers.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    } else if (category === 'product') {
+ if (category === 'product') {
         modalTitle.textContent = 'Equipment & Products';
         content = `
             <div class="content-section">
@@ -380,104 +321,9 @@ function showProductDetails(productId) {
     modal.style.display = 'flex';
 }
 
-// Missing function: showBiofoulingDetails
-function showBiofoulingDetails() {
-    const modal = document.getElementById('detailModal');
-    const modalBody = document.getElementById('modalBody');
-    const modalTitle = document.getElementById('modalTitle');
-    
-    modalTitle.textContent = 'Biofouling Management Services';
-    
-    const content = `
-        <div class="content-section">
-            <h3>Complete Biofouling Solutions</h3>
-            <p>${productTemplates.biofouling.intro}</p>
-            
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <i class="fas fa-play-circle"></i>
-                </div>
-            </div>
-            
-            <h3>Our Services</h3>
-            <div class="case-studies">
-                ${productTemplates.biofouling.services.map(service => `
-                    <div class="case-study-card">
-                        <div class="case-study-image">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <div class="case-study-content">
-                            <h4 class="case-study-title">${service.name}</h4>
-                            <p class="case-study-description">${service.desc}</p>
-                            <ul style="margin-top: 1rem; font-size: 0.9rem;">
-                                ${service.includes.map(item => `<li>${item}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    
-    modalBody.innerHTML = content;
-    modal.style.display = 'flex';
-}
 
-// Missing function: showEngineeringDetails
-function showEngineeringDetails() {
-    const modal = document.getElementById('detailModal');
-    const modalBody = document.getElementById('modalBody');
-    const modalTitle = document.getElementById('modalTitle');
-    
-    modalTitle.textContent = 'Engineering Services';
-    
-    const content = `
-        <div class="content-section">
-            <h3>Marine Engineering Excellence</h3>
-            <p>Professional marine engineering services delivered by certified experts with decades of maritime experience.</p>
-            
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <i class="fas fa-play-circle"></i>
-                </div>
-            </div>
-            
-            <h3>Our Engineering Services</h3>
-            <div class="case-studies">
-                <div class="case-study-card">
-                    <div class="case-study-image">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="case-study-content">
-                        <h4 class="case-study-title">Structural Assessments</h4>
-                        <p class="case-study-description">Comprehensive hull and structural integrity evaluations using advanced inspection techniques.</p>
-                    </div>
-                </div>
-                <div class="case-study-card">
-                    <div class="case-study-image">
-                        <i class="fas fa-wrench"></i>
-                    </div>
-                    <div class="case-study-content">
-                        <h4 class="case-study-title">Underwater Repairs</h4>
-                        <p class="case-study-description">Professional underwater repair and maintenance services to minimize vessel downtime.</p>
-                    </div>
-                </div>
-                <div class="case-study-card">
-                    <div class="case-study-image">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    <div class="case-study-content">
-                        <h4 class="case-study-title">Technical Inspections</h4>
-                        <p class="case-study-description">Detailed technical inspections and certification services for regulatory compliance.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modalBody.innerHTML = content;
-    modal.style.display = 'flex';
-}
+
+
 
 // Missing function: selectROV
 function selectROV(rovId, rovName, rovPrice) {
@@ -525,74 +371,7 @@ function loadNextStep(selection) {
     
     // Determine next step based on selection
     if (journeyState.currentStep === 2) {
-        if (selection === 'service') {
-            nextStepHtml = `
-                <div class="step" id="step2" style="animation-delay: 0.1s">
-                    <div class="step-header">
-                        <div class="step-number">2</div>
-                        <div class="step-title">
-                            <h2>What type of service do you need?</h2>
-                            <p>Select your service category</p>
-                        </div>
-                    </div>
-                    <div class="choices-grid">
-                        <div class="choice-card">
-                            <div class="choice-card-body">
-                                <div class="choice-media media-service">
-                                    <i class="fas fa-water"></i>
-                                </div>
-                                <div class="choice-icon">
-                                    <i class="fas fa-water"></i>
-                                </div>
-                                <h3 class="choice-title">Biofouling Services</h3>
-                                <p class="choice-description">Complete biofouling management from inspection to cleaning</p>
-                                <ul class="choice-features">
-                                    <li>Hull inspections</li>
-                                    <li>In-water cleaning with capture</li>
-                                    <li>Management programs</li>
-                                </ul>
-                                <p class="choice-price">$5,000 - $50,000</p>
-                                <div class="choice-actions">
-                                    <button class="btn-learn-more" onclick="showBiofoulingDetails()">
-                                        <i class="fas fa-info-circle"></i> Details
-                                    </button>
-                                    <button class="btn-select" onclick="selectChoice('biofouling', 'Biofouling Services', '$5,000 - $50,000')">
-                                        Select <i class="fas fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="choice-card">
-                            <div class="choice-card-body">
-                                <div class="choice-media media-filter">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="choice-icon">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <h3 class="choice-title">Engineering Services</h3>
-                                <p class="choice-description">Technical marine engineering and repairs</p>
-                                <ul class="choice-features">
-                                    <li>Structural assessments</li>
-                                    <li>Underwater repairs</li>
-                                    <li>Technical inspections</li>
-                                </ul>
-                                <p class="choice-price">$8,000 - $40,000</p>
-                                <div class="choice-actions">
-                                    <button class="btn-learn-more" onclick="showEngineeringDetails()">
-                                        <i class="fas fa-info-circle"></i> Details
-                                    </button>
-                                    <button class="btn-select" onclick="selectChoice('engineering', 'Engineering Services', '$8,000 - $40,000')">
-                                        Select <i class="fas fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        } else if (selection === 'product') {
+        if (selection === 'product') {
             nextStepHtml = `
                 <div class="step" id="step2" style="animation-delay: 0.1s">
                     <div class="step-header">
@@ -782,8 +561,6 @@ function loadNextStep(selection) {
         // Show specific products or services
         if (selection === 'rov') {
             nextStepHtml = createROVSelection();
-        } else if (selection === 'biofouling') {
-            nextStepHtml = createBiofoulingServices();
         }
     }
     
@@ -992,44 +769,7 @@ function showROVComparison() {
     modal.style.display = 'flex';
 }
 
-function createBiofoulingServices() {
-    const services = productTemplates.biofouling.services;
-    return `
-        <div class="step" id="step3" style="animation-delay: 0.1s">
-            <div class="step-header">
-                <div class="step-number">3</div>
-                <div class="step-title">
-                    <h2>Select Biofouling Management Service</h2>
-                    <p>${productTemplates.biofouling.intro}</p>
-                </div>
-            </div>
-            <div class="choices-grid">
-                ${services.map((service, index) => `
-                    <div class="choice-card">
-                        <div class="choice-card-body">
-                            <div class="choice-media media-service">
-                                <i class="fas fa-${index === 0 ? 'search' : index === 1 ? 'broom' : 'clipboard-check'}"></i>
-                            </div>
-                            <h3 class="choice-title">${service.name}</h3>
-                            <p class="choice-description">${service.desc}</p>
-                            <ul class="choice-features">
-                                ${service.includes.map(item => `<li>${item}</li>`).join('')}
-                            </ul>
-                            <p class="choice-description" style="font-style: italic; font-size: 0.9rem;">
-                                <i class="fas fa-trophy"></i> ${service.caseStudy}
-                            </p>
-                            <div class="choice-actions">
-                                <button class="btn-select" onclick="selectChoice('${service.name.toLowerCase().replace(/\s+/g, '-')}', '${service.name}', 'Custom Quote')">
-                                    Select <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-}
+
 
 function showFinalStep() {
     const stepsContainer = document.getElementById('journeySteps');
