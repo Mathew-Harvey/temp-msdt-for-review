@@ -63,13 +63,102 @@ function showComparison() {
 
 // Missing function: showProductDetails
 function showProductDetails(productId) {
+    console.log('showProductDetails called with:', productId);
+    
     const modal = document.getElementById('detailModal');
     const modalBody = document.getElementById('modalBody');
     const modalTitle = document.getElementById('modalTitle');
     
+    console.log('Modal elements found:', { modal, modalBody, modalTitle });
+    
+    if (!modal || !modalBody || !modalTitle) {
+        console.error('Modal elements not found');
+        return;
+    }
+    
     let content = '';
     
-    if (productId === 'rov') {
+    if (productId === 'product') {
+        modalTitle.textContent = 'Equipment & Products';
+        content = `
+            <div class="content-section">
+                <h3>Professional Marine Equipment</h3>
+                <p>Advanced technology solutions for maritime operations, including ROVs, cleaning systems, and specialized equipment.</p>
+                
+                <div class="media-gallery">
+                    <div class="gallery-main">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="gallery-thumbs">
+                        <div class="gallery-thumb" style="background: #FFE5CC;"></div>
+                        <div class="gallery-thumb" style="background: #D1E7FF;"></div>
+                        <div class="gallery-thumb" style="background: #E8F5E8;"></div>
+                    </div>
+                </div>
+                
+                <h3>Available Categories</h3>
+                <ul>
+                    <li><strong>ROV Systems:</strong> Professional inspection and maintenance ROVs (Revolution, Pivot, Photon)</li>
+                    <li><strong>Crawler Systems:</strong> Hull cleaning robots and automated maintenance systems</li>
+                    <li><strong>Filtration Equipment:</strong> Environmental compliance and water treatment solutions</li>
+                    <li><strong>Diving Equipment:</strong> Professional diving gear and safety systems</li>
+                    <li><strong>Software Platform:</strong> Digital management and compliance tracking systems</li>
+                </ul>
+                
+                <p><strong>Price Range:</strong> $10,000 - $200,000 depending on equipment type and configuration</p>
+            </div>
+        `;
+    } else if (productId === 'maintenance') {
+        modalTitle.textContent = 'Servicing & Maintenance';
+        content = `
+            <div class="content-section">
+                <h3>Professional Maintenance Services</h3>
+                <p>Comprehensive maintenance and servicing solutions to keep your marine equipment operating at peak performance.</p>
+                
+                <div class="media-gallery">
+                    <div class="gallery-main">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                </div>
+                
+                <h3>Available Services</h3>
+                <ul>
+                    <li><strong>Scheduled Maintenance:</strong> Preventive maintenance programs and equipment health monitoring</li>
+                    <li><strong>Emergency Repairs:</strong> 24/7 emergency response and rapid repair services</li>
+                    <li><strong>Certification Renewals:</strong> Equipment certification and regulatory compliance support</li>
+                    <li><strong>Performance Optimization:</strong> Equipment tuning and efficiency improvements</li>
+                    <li><strong>Spare Parts Supply:</strong> Genuine parts and components for all equipment</li>
+                </ul>
+                
+                <p><strong>Price Range:</strong> $2,000 - $20,000 depending on service type and equipment</p>
+            </div>
+        `;
+    } else if (productId === 'other') {
+        modalTitle.textContent = 'Consultation & Other Services';
+        content = `
+            <div class="content-section">
+                <h3>Expert Maritime Consultation</h3>
+                <p>Specialized consultation services and custom solutions for unique maritime operational needs.</p>
+                
+                <div class="media-gallery">
+                    <div class="gallery-main">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                </div>
+                
+                <h3>Available Services</h3>
+                <ul>
+                    <li><strong>Regulatory Compliance:</strong> Expert guidance on IMO guidelines and biosecurity requirements</li>
+                    <li><strong>Custom Engineering:</strong> Bespoke design solutions for specialized operational needs</li>
+                    <li><strong>Training Programs:</strong> Comprehensive crew training and technical skill development</li>
+                    <li><strong>Project Management:</strong> End-to-end project coordination and oversight</li>
+                    <li><strong>Technical Audits:</strong> Equipment and operational assessments</li>
+                </ul>
+                
+                <p><strong>Pricing:</strong> Custom quotes based on project scope and requirements</p>
+            </div>
+        `;
+    } else if (productId === 'rov') {
         modalTitle.textContent = 'ROV Systems';
         content = `
             <div class="content-section">
@@ -186,7 +275,95 @@ function showProductDetails(productId) {
     }
     
     modalBody.innerHTML = content;
-    modal.style.display = 'flex';
+    
+    // Force the modal to be visible with !important styles
+    modal.setAttribute('style', `
+        display: flex !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: white !important;
+        z-index: 99999 !important;
+        overflow-y: auto !important;
+        padding: 0 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    `);
+    
+    // Style the modal content for full-page experience
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.style.width = '100%';
+        modalContent.style.maxWidth = '100%';
+        modalContent.style.height = '100%';
+        modalContent.style.margin = '0';
+        modalContent.style.borderRadius = '0';
+        modalContent.style.boxShadow = 'none';
+        modalContent.style.backgroundColor = 'white';
+        modalContent.style.display = 'flex';
+        modalContent.style.flexDirection = 'column';
+    }
+    
+    // Style the modal header for better full-page experience
+    const modalHeader = modal.querySelector('.modal-header');
+    if (modalHeader) {
+        modalHeader.style.backgroundColor = 'var(--accent-color)';
+        modalHeader.style.color = 'white';
+        modalHeader.style.padding = '20px';
+        modalHeader.style.margin = '0';
+        modalHeader.style.borderRadius = '0';
+        modalHeader.style.borderBottom = 'none';
+    }
+    
+    // Style the modal body for full-page content
+    if (modalBody) {
+        modalBody.style.flex = '1';
+        modalBody.style.padding = '40px';
+        modalBody.style.overflowY = 'auto';
+    }
+    
+    // Add a prominent back button
+    const backButton = document.createElement('button');
+    backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Sales';
+    backButton.style.cssText = `
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 10000;
+        transition: all 0.3s ease;
+    `;
+    backButton.onclick = function() {
+        closeSalesModal();
+    };
+    backButton.onmouseover = function() {
+        this.style.background = 'var(--accent-color)';
+        this.style.color = 'white';
+    };
+    backButton.onmouseout = function() {
+        this.style.background = 'rgba(255, 255, 255, 0.9)';
+        this.style.color = 'var(--accent-color)';
+    };
+    
+    // Remove any existing back button and add the new one
+    const existingBackButton = modal.querySelector('.back-button');
+    if (existingBackButton) {
+        existingBackButton.remove();
+    }
+    backButton.className = 'back-button';
+    modal.appendChild(backButton);
+    
+    console.log('Full-page modal should now be visible');
 }
 
 
@@ -206,8 +383,58 @@ function selectPackage(rovId, packageName, packagePrice) {
     closeModal();
 }
 
-function closeModal() {
-    document.getElementById('detailModal').style.display = 'none';
+function closeSalesModal() {
+    const modal = document.getElementById('detailModal');
+    modal.style.display = 'none';
+    
+    // Reset modal styles to default
+    modal.style.position = '';
+    modal.style.top = '';
+    modal.style.left = '';
+    modal.style.width = '';
+    modal.style.height = '';
+    modal.style.backgroundColor = '';
+    modal.style.overflowY = '';
+    modal.style.padding = '';
+    
+    // Reset modal content styles
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.style.width = '';
+        modalContent.style.maxWidth = '';
+        modalContent.style.height = '';
+        modalContent.style.margin = '';
+        modalContent.style.borderRadius = '';
+        modalContent.style.boxShadow = '';
+        modalContent.style.backgroundColor = '';
+        modalContent.style.display = '';
+        modalContent.style.flexDirection = '';
+    }
+    
+    // Reset modal header styles
+    const modalHeader = modal.querySelector('.modal-header');
+    if (modalHeader) {
+        modalHeader.style.backgroundColor = '';
+        modalHeader.style.color = '';
+        modalHeader.style.padding = '';
+        modalHeader.style.margin = '';
+        modalHeader.style.borderRadius = '';
+        modalHeader.style.borderBottom = '';
+    }
+    
+    // Reset modal body styles
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+        modalBody.style.flex = '';
+        modalBody.style.padding = '';
+        modalBody.style.overflowY = '';
+    }
+    
+    // Remove back button
+    const backButton = modal.querySelector('.back-button');
+    if (backButton) {
+        backButton.remove();
+    }
 }
 
 // Selection Handler
@@ -771,7 +998,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 // Close modal when clicking outside
 document.getElementById('detailModal').addEventListener('click', function(e) {
     if (e.target === this) {
-        closeModal();
+        closeSalesModal();
     }
 });
 

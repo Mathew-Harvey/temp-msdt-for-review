@@ -163,10 +163,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove is-loading class from body
         document.body.classList.remove('is-loading');
         
-        // Start playing the video
-        heroVideo.play().catch(err => {
-          console.log("Auto-play prevented by browser:", err);
-        });
+        // Start playing the video if it exists
+        if (heroVideo) {
+          heroVideo.play().catch(err => {
+            console.log("Auto-play prevented by browser:", err);
+          });
+        }
       }, 800);
     }
   });

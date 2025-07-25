@@ -110,7 +110,7 @@
                                 </ul>
                                 <p class="choice-price">From $10,000</p>
                                 <div class="choice-actions">
-                                    <button class="btn-learn-more" onclick="showDetails('product')">
+                                    <button class="btn-learn-more" onclick="showProductDetails('product')">
                                         <i class="fas fa-info-circle"></i> Learn More
                                     </button>
                                     <button class="btn-select" onclick="selectChoice('product', 'Equipment & Products', '$10,000 - $200,000')">
@@ -137,7 +137,7 @@
                                 </ul>
                                 <p class="choice-price">From $2,000</p>
                                 <div class="choice-actions">
-                                    <button class="btn-learn-more" onclick="showDetails('maintenance')">
+                                    <button class="btn-learn-more" onclick="showProductDetails('maintenance')">
                                         <i class="fas fa-info-circle"></i> Learn More
                                     </button>
                                     <button class="btn-select" onclick="selectChoice('maintenance', 'Servicing & Maintenance', '$2,000 - $20,000')">
@@ -164,7 +164,7 @@
                                 </ul>
                                 <p class="choice-price">Custom Quote</p>
                                 <div class="choice-actions">
-                                    <button class="btn-learn-more" onclick="showDetails('other')">
+                                    <button class="btn-learn-more" onclick="showProductDetails('other')">
                                         <i class="fas fa-info-circle"></i> Learn More
                                     </button>
                                     <button class="btn-select" onclick="selectChoice('other', 'Consultation & Other', 'Custom Quote')">
@@ -243,11 +243,11 @@
     </div>
 
     <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
+    <div class="modal-overlay" id="detailModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Service Details</h2>
-                <button class="modal-close" onclick="closeModal()">
+                <button class="modal-close" onclick="closeSalesModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>

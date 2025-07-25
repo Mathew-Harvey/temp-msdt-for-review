@@ -92,11 +92,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // Get the correct asset path based on current page location
+        const getAssetPath = (asset) => {
+            const path = window.location.pathname;
+            if (path.includes('/blog/')) {
+                return `../../assets/${asset}`;
+            }
+            return `./assets/${asset}`;
+        };
+
         // Preload critical images when they're about to be needed
         const preloadImages = () => {
             const imageUrls = [
-                './assets/marinestream_logo_colour.png',
-                './assets/graphCapStat.png'
+                getAssetPath('marinestream_logo_colour.png'),
+                getAssetPath('graphCapStat.png')
             ];
             
             imageUrls.forEach(url => {

@@ -45,6 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Generate and open the capability statement
 function generateCapabilityStatement() {
+    // Get the correct asset path based on current page location
+    const getAssetPath = (asset) => {
+        const path = window.location.pathname;
+        if (path.includes('/blog/')) {
+            return `../../assets/${asset}`;
+        }
+        return `./assets/${asset}`;
+    };
+    
     // Get the accent color from CSS
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#FF6600';
     const currentYear = new Date().getFullYear();
@@ -153,7 +162,7 @@ function generateCapabilityStatement() {
                 <div class="page-content">
                     <!-- Header -->
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid ${accentColor}; padding-bottom: 8px; margin-bottom: 12px;">
-                        <img src="./assets/marinestream_logo_colour.png" alt="MarineStream Logo" style="height: 45px;">
+                        <img src="${getAssetPath('marinestream_logo_colour.png')}" alt="MarineStream Logo" style="height: 45px;">
                         <div style="text-align: right;">
                             <h1 style="color: #1a1a1a;">Capability Statement</h1>
                             <p style="color: ${accentColor}; font-size: 12pt; font-weight: 600; margin: 0;">Integrated Biofouling & Asset Management</p>
@@ -208,7 +217,7 @@ function generateCapabilityStatement() {
 
                     <!-- Performance Graph - ENLARGED -->
                     <div style="margin-top: 10px; text-align: center;">
-                        <img src="./assets/graphCapStat.png" alt="Performance Graph" style="max-width: 100%; height: auto;">
+                        <img src="${getAssetPath('graphCapStat.png')}" alt="Performance Graph" style="max-width: 100%; height: auto;">
                     </div>
                 </div>
             </div>
@@ -263,38 +272,38 @@ function generateCapabilityStatement() {
                     <div style="margin-bottom: 15px;">
                         <h3 style="color: #1a1a1a; font-size: 11pt; margin: 0 0 5px 0;">Clients and Industry Partners</h3>
                         <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; padding: 8px; border-radius: 6px; border: 1px solid #e9ecef;">
-                            <img src="./assets/AMC.jpg" alt="AMC Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/ame.jpg" alt="AME Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/AscLogo150x.jpg" alt="ASC Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/austal.jpg" alt="Austal Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/babcock.png" alt="Babcock Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/bae.jpg" alt="BAE Systems Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/bp.jpg" alt="BP Shipping Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/carnival.jpg" alt="Carnival Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/cma.jpg" alt="CMA CGM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/cock.jpg" alt="City of Cockburn Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/dept_trans.jpg" alt="Department of Transport Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/echo.jpg" alt="Echo Marine Group Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/icm.jpg" alt="ICM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/IKAD-Gold-Black-Smol.png" alt="IKAD Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/jfd.jpg" alt="JFD Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/maersk.jpg" alt="Maersk Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/inchscape.jpg" alt="Inchcape Shipping Services Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/nsm.jpg" alt="NSM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/oldendorff.jpg" alt="Oldendorff Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/pta.jpg" alt="PTA Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/ran.jpg" alt="RAN Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/rio.jpg" alt="Rio Tinto Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/rotto.jpg" alt="Rottnest Island Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/scamp.jpg" alt="Scamp Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/Seatech-Logo.png" alt="SeaTec Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/silver.jpg" alt="Silver Yachts Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/subsea.jpg" alt="Subsea Global Solutions Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/svitzer.jpg" alt="Svitzer Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/swire.jpg" alt="Swire Shipping Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/teekay.jpg" alt="Teekay Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/wilhelmsen.jpg" alt="Wilhelmsen Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
-                            <img src="./assets/freoports.jpg" alt="Fremantle Ports Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('AMC.jpg')}" alt="AMC Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('ame.jpg')}" alt="AME Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('AscLogo150x.jpg')}" alt="ASC Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('austal.jpg')}" alt="Austal Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('babcock.png')}" alt="Babcock Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('bae.jpg')}" alt="BAE Systems Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('bp.jpg')}" alt="BP Shipping Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('carnival.jpg')}" alt="Carnival Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('cma.jpg')}" alt="CMA CGM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('cock.jpg')}" alt="City of Cockburn Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('dept_trans.jpg')}" alt="Department of Transport Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('echo.jpg')}" alt="Echo Marine Group Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('icm.jpg')}" alt="ICM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('IKAD-Gold-Black-Smol.png')}" alt="IKAD Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('jfd.jpg')}" alt="JFD Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('maersk.jpg')}" alt="Maersk Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('inchscape.jpg')}" alt="Inchcape Shipping Services Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('nsm.jpg')}" alt="NSM Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('oldendorff.jpg')}" alt="Oldendorff Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('pta.jpg')}" alt="PTA Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('ran.jpg')}" alt="RAN Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('rio.jpg')}" alt="Rio Tinto Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('rotto.jpg')}" alt="Rottnest Island Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('scamp.jpg')}" alt="Scamp Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('Seatech-Logo.png')}" alt="SeaTec Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('silver.jpg')}" alt="Silver Yachts Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('subsea.jpg')}" alt="Subsea Global Solutions Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('svitzer.jpg')}" alt="Svitzer Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('swire.jpg')}" alt="Swire Shipping Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('teekay.jpg')}" alt="Teekay Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('wilhelmsen.jpg')}" alt="Wilhelmsen Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
+                            <img src="${getAssetPath('freoports.jpg')}" alt="Fremantle Ports Logo" style="height: 30px; object-fit: contain; max-width: 100px;">
                         </div>
                     </div>
                     
@@ -312,7 +321,7 @@ function generateCapabilityStatement() {
                                 <p style="margin: 0 0 3px 0; font-size: 9pt;"><strong>Web:</strong> <a href="https://www.marinestream.com.au" target="_blank" style="color: ${accentColor}; text-decoration: none;">www.marinestream.com.au</a></p>
                                 <p style="margin: 0 0 3px 0; font-size: 9pt;"><strong>Address:</strong> 13 Possner Way, Henderson, WA 6166, Australia</p>
                             </div>
-                            <img src="./assets/logo.png" alt="MarineStream Logo" style="height: 50px; margin-left: 20px;">
+                            <img src="${getAssetPath('logo.png')}" alt="MarineStream Logo" style="height: 50px; margin-left: 20px;">
                         </div>
                         
                         <!-- Footer -->

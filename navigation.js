@@ -31,6 +31,7 @@ class MarineStreamNavigation {
         const path = window.location.pathname;
         if (path.includes('index.html') || path === '/' || path === '') return 'home';
         if (path.includes('blog.html')) return 'blog';
+        if (path.includes('/blog/') && path.includes('.html')) return 'blog-article';
         if (path.includes('sales.html')) return 'sales';
         if (path.includes('privacy.html')) return 'privacy';
         if (path.includes('hullCalc.html')) return 'hullCalc';
@@ -58,7 +59,14 @@ class MarineStreamNavigation {
         if (this.currentPage === 'home') {
             return '#home';
         }
-        return './index.html#home';
+        // Check if we're in a subdirectory (like blog/article/)
+        const path = window.location.pathname;
+        if (path.includes('/blog/')) {
+            const link = '../../index.html#home';
+            return link;
+        }
+        const link = './index.html#home';
+        return link;
     }
 
     /**
@@ -68,7 +76,14 @@ class MarineStreamNavigation {
         if (this.currentPage === 'home') {
             return `#${section}`;
         }
-        return `./index.html#${section}`;
+        // Check if we're in a subdirectory (like blog/article/)
+        const path = window.location.pathname;
+        if (path.includes('/blog/')) {
+            const link = `../../index.html#${section}`;
+            return link;
+        }
+        const link = `./index.html#${section}`;
+        return link;
     }
 
     /**
@@ -139,6 +154,8 @@ class MarineStreamNavigation {
         const existingHeader = document.querySelector('.main-header');
         const navPlaceholder = document.getElementById('nav-placeholder');
         
+
+        
         if (existingHeader) {
             // Replace existing header
             existingHeader.outerHTML = this.generateNavigation();
@@ -166,6 +183,7 @@ class MarineStreamNavigation {
                 const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
                 mobileToggle.setAttribute('aria-expanded', !isExpanded);
                 navContainer.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
             });
 
             // Close mobile menu when clicking on a link
@@ -174,6 +192,7 @@ class MarineStreamNavigation {
                 link.addEventListener('click', () => {
                     mobileToggle.setAttribute('aria-expanded', 'false');
                     navContainer.classList.remove('active');
+                    mobileToggle.classList.remove('active');
                 });
             });
         }
@@ -182,8 +201,10 @@ class MarineStreamNavigation {
 
 // Auto-initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Navigation.js: DOM loaded, initializing navigation...');
     const nav = new MarineStreamNavigation();
     nav.init();
+    console.log('Navigation.js: Navigation initialization complete');
 });
 
 // Export for manual initialization if needed
