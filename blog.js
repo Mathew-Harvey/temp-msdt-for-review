@@ -540,7 +540,7 @@ function initKeyboardNavigation() {
     document.addEventListener('keydown', (e) => {
         // Escape key to close modals
         if (e.key === 'Escape') {
-            hideSubscribeModal();
+            // hideSubscribeModal(); // This function is removed
         }
         
         // Tab navigation improvements
@@ -612,181 +612,6 @@ function trapFocus(modal, event) {
 }
 
 /**
- * Enhanced modal functionality
- */
-function initModalHandlers() {
-    // Close modal when clicking overlay
-    const modalOverlay = document.getElementById('subscribe-modal');
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) {
-                hideSubscribeModal();
-            }
-        });
-    }
-    
-    // Close modal when clicking close button
-    const closeBtn = document.querySelector('.modal-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', hideSubscribeModal);
-    }
-    
-    // Close modal when clicking "Maybe Later" button
-    const maybeLaterBtn = document.querySelector('.subscribe-close-btn');
-    if (maybeLaterBtn) {
-        maybeLaterBtn.addEventListener('click', hideSubscribeModal);
-    }
-    
-    // Handle form submission
-    const subscribeForm = document.getElementById('subscribe-form');
-    if (subscribeForm) {
-        subscribeForm.addEventListener('submit', handleAdvancedSubscribeSubmit);
-    }
-}
-
-/**
- * Enhanced subscription form handling
- */
-async function handleAdvancedSubscribeSubmit(e) {
-    e.preventDefault();
-    
-    const form = e.target;
-    const formData = new FormData(form);
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    
-    // Advanced loading state
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.7';
-    
-    try {
-        // Simulate API call (replace with actual endpoint)
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        const response = { success: true };
-        
-        if (response.success) {
-            // Success animation
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
-            submitBtn.style.background = '#10b981';
-            
-            // Show success notification
-            showAdvancedNotification('Successfully subscribed! Thank you for joining our newsletter.', 'success');
-            
-            setTimeout(() => {
-                hideSubscribeModal();
-                form.reset();
-            }, 1500);
-        } else {
-            throw new Error('Subscription failed');
-        }
-        
-    } catch (error) {
-        console.error('Subscription error:', error);
-        showAdvancedNotification(error.message || 'Failed to subscribe. Please try again.', 'error');
-    } finally {
-        // Reset button after delay
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-            submitBtn.style.background = '';
-        }, 2000);
-    }
-}
-
-/**
- * Advanced notification system
- */
-function showAdvancedNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.setAttribute('role', 'alert');
-    notification.setAttribute('aria-live', 'assertive');
-    
-    const iconMap = {
-        success: 'check-circle',
-        error: 'exclamation-circle',
-        info: 'info-circle'
-    };
-    
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${iconMap[type]}" aria-hidden="true"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
-    // Auto-remove with advanced timing
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 400);
-    }, 5000);
-    
-    // Announce to screen readers
-    if (window.announceToScreenReader) {
-        window.announceToScreenReader(message);
-    }
-}
-
-/**
- * Enhanced modal show/hide with advanced animations
- */
-function showSubscribeModal() {
-    const subscribeModal = document.getElementById('subscribe-modal');
-    if (subscribeModal) {
-        subscribeModal.style.display = 'flex';
-        document.body.classList.add('modal-open');
-        document.documentElement.classList.add('modal-open');
-        
-        setTimeout(() => {
-            subscribeModal.classList.add('active');
-        }, 10);
-        
-        // Focus management
-        const firstInput = subscribeModal.querySelector('input[type="email"]');
-        if (firstInput) {
-            setTimeout(() => firstInput.focus(), 300);
-        }
-        
-        // Announce to screen readers
-        if (window.announceToScreenReader) {
-            window.announceToScreenReader('Newsletter subscription modal opened');
-        }
-    }
-}
-
-function hideSubscribeModal() {
-    const subscribeModal = document.getElementById('subscribe-modal');
-    if (subscribeModal) {
-        subscribeModal.classList.remove('active');
-        
-        setTimeout(() => {
-            subscribeModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            document.documentElement.classList.remove('modal-open');
-        }, 300);
-        
-        // Announce to screen readers
-        if (window.announceToScreenReader) {
-            window.announceToScreenReader('Newsletter subscription modal closed');
-        }
-    }
-}
-
-/**
  * Enhanced utility functions
  */
 function showElement(element) {
@@ -811,7 +636,7 @@ async function readFullPost(postId) {
     
     try {
         // Show loading state
-        showAdvancedNotification('Loading article...', 'info');
+        // showAdvancedNotification('Loading article...', 'info'); // This function is removed
         
         // Fetch the full blog post from API
         const response = await fetch(`/api/blog/${postId}`);
@@ -838,7 +663,7 @@ async function readFullPost(postId) {
         
     } catch (error) {
         console.error('Error loading full post:', error);
-        showAdvancedNotification('Failed to load article. Please try again.', 'error');
+        // showAdvancedNotification('Failed to load article. Please try again.', 'error'); // This function is removed
     }
 }
 
@@ -944,7 +769,7 @@ function hideFullArticleModal() {
 }
 
 // Initialize all modal handlers when DOM is ready
-document.addEventListener('DOMContentLoaded', initModalHandlers);
+// document.addEventListener('DOMContentLoaded', initModalHandlers); // This line is removed
 
 // --- Unified Modal System Integration ---
 // All auto-popup and cookie logic removed - modal only shows on user request

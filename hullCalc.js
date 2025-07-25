@@ -304,10 +304,10 @@ function initHullFoulingCalculator() {
 
     // Update custom vessel calculations
     function updateCustomVesselCalculations() {
-        const L = parseFloat(document.getElementById('customLength').value) || 50;
-        const B = parseFloat(document.getElementById('customBeam').value) || 10;
-        const T = parseFloat(document.getElementById('customDraft').value) || 4;
-        const Cb = parseFloat(document.getElementById('customCb').value) || 0.65;
+        const L = Math.max(10, parseFloat(document.getElementById('customLength').value) || 50);
+        const B = Math.max(3, parseFloat(document.getElementById('customBeam').value) || 10);
+        const T = Math.max(1, parseFloat(document.getElementById('customDraft').value) || 4);
+        const Cb = Math.min(0.9, Math.max(0.4, parseFloat(document.getElementById('customCb').value) || 0.65));
 
         const displacement = L * B * T * Cb * RHO_WATER / 1000;
         document.getElementById('customDisplacement').value = Math.round(displacement);

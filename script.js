@@ -685,7 +685,7 @@ function initVideos() {
         const videoContainer = video ? video.closest('.video-container') : null; // Get container
 
         if (!video || !playBtn || !videoContainer) {
-            // console.warn(`Video setup failed for: ${videoId}`);
+            console.warn(`Video setup failed for: ${videoId}`);
             return;
         }
 
@@ -1511,10 +1511,9 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-/**
- * Unified Modal System
- * Provides consistent modal functionality across all pages
- */
+// Add unified ModalSystem class at the top of script.js
+// This consolidates modal handling from all files
+
 class ModalSystem {
     constructor() {
         this.activeModal = null;
