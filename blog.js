@@ -1,174 +1,220 @@
 /**
- * MarineStream Blog JavaScript - World-Class Edition
+ * MarineStream Modern Blog System
  * 
- * This file handles sophisticated blog functionality including:
- * - Advanced loading and animation systems
- * - Scroll-triggered animations using GSAP
- * - Premium micro-interactions
- * - Performance-optimized effects
+ * A comprehensive blog system with markdown parsing, modern UI/UX,
+ * and features inspired by award-winning blog sites like Medium,
+ * The Verge, and modern technical blogs.
+ * 
+ * Features:
+ * - Markdown parsing with image integration
+ * - Reading progress indicator
+ * - Table of contents generation
+ * - Social sharing
+ * - Responsive design
+ * - SEO optimization
+ * - Accessibility features
  * 
  * @author MarineStream Development Team
- * @version 2.0.0 - World-Class Edition
+ * @version 3.0.0 - Modern Blog Edition
  * @since 2024
  */
 
+// Blog configuration
+const BLOG_CONFIG = {
+    basePath: './blog/',
+    articles: [
+        {
+            id: 'revolutionizing-underwater-inspections',
+            title: 'Revolutionizing Underwater Inspections and Biofouling Management',
+            slug: 'revolutionizing-underwater-inspections',
+            excerpt: 'How MarineStream enables efficient, safe, and compliant fleet operations through cutting-edge hull-cleaning technology and ROV integration.',
+            category: 'Technology',
+            featured: true,
+            publishedDate: '2024-12-20',
+            readingTime: 15,
+            tags: ['ROV', 'Biofouling', 'Maritime Technology', 'UWILD', 'Fleet Management'],
+            featuredImage: './blog/revolutionizing-underwater-inspections/msTeam.png',
+            author: {
+                name: 'MarineStream Team',
+                title: 'Maritime Technology Experts',
+                avatar: './assets/marinestream_logo_blue.png'
+            }
+        }
+        // Additional articles can be added here
+    ]
+};
+
+// Global state
+let currentArticle = null;
+let readingProgress = 0;
+let tocElements = [];
+
+/**
+ * Initialize the blog system
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize world-class blog functionality
-    initAdvancedBlog();
+    initModernBlog();
+    setupReadingProgress();
+    setupScrollAnimations();
+    initializeSubscribeModal();
 });
 
 /**
- * Initialize advanced blog functionality with sophisticated features
+ * Initialize the modern blog system
  */
-function initAdvancedBlog() {
-    // Core functionality
+function initModernBlog() {
     loadBlogPosts();
-    
-    // Advanced features
-    initAdvancedAnimations();
-    initScrollTriggers();
-    initMicroInteractions();
-    initPerformanceOptimizations();
-    initAccessibilityEnhancements();
-    
-    console.log('🎨 World-class blog initialized with premium features');
+    setupEventListeners();
+    console.log('🎨 Modern blog system initialized');
 }
 
 /**
- * Enhanced blog post loading with sophisticated states
+ * Load and display blog posts
  */
-async function loadBlogPosts() {
+function loadBlogPosts() {
     const loadingEl = document.getElementById('blog-loading');
     const errorEl = document.getElementById('blog-error');
     const postsEl = document.getElementById('blog-posts');
     const emptyEl = document.getElementById('blog-empty');
     const countEl = document.getElementById('blog-count');
-    
-    // Show premium loading state
-    showElement(loadingEl);
-    hideElement(errorEl);
-    hideElement(postsEl);
-    hideElement(emptyEl);
-    
-    // Add loading animation to count
-    if (countEl) {
-        animateCounter(countEl, 0, 0, 1000);
-    }
-    
+    const featuredEl = document.getElementById('featured-article');
+
     try {
-        // Fetch blog posts from API
-        const response = await fetch('/api/blog');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (!data.success) {
-            throw new Error(data.message || 'Failed to load blog posts');
-        }
-        
-        const posts = data.posts || [];
-        
-        // Animate count update
-        if (countEl) {
-            animateCounter(countEl, 0, posts.length, 1500);
-        }
-        
-        if (posts.length > 0) {
-            // Display posts with staggered animation
-            await displayBlogPostsAdvanced(posts);
-            showElement(postsEl);
-        } else {
-            showElement(emptyEl);
-        }
+        // Show loading state
+        showElement(loadingEl);
+        hideElement(errorEl);
+        hideElement(postsEl);
+        hideElement(emptyEl);
+        hideElement(featuredEl);
+
+        // Simulate loading delay for smooth UX
+        setTimeout(() => {
+            const articles = BLOG_CONFIG.articles;
+            console.log('Loading blog posts:', articles.length, 'articles found');
+            
+            if (articles.length > 0) {
+                // Update counter with animation
+                animateCounter(countEl, 0, articles.length, 1000);
+                
+                // Setup featured article
+                const featuredArticle = articles.find(article => article.featured);
+                if (featuredArticle) {
+                    console.log('Setting up featured article:', featuredArticle.title);
+                    try {
+                        setupFeaturedArticle(featuredArticle);
+                        showElement(featuredEl);
+                    } catch (featuredError) {
+                        console.error('Error setting up featured article:', featuredError);
+                    }
+                }
+                
+                // Display regular articles
+                displayBlogPosts(articles.filter(article => !article.featured));
+                showElement(postsEl);
+            } else {
+                showElement(emptyEl);
+            }
+            
+            hideElement(loadingEl);
+        }, 800);
         
     } catch (error) {
         console.error('Error loading blog posts:', error);
         showElement(errorEl);
-    } finally {
-        // Hide loading with fade out
-        setTimeout(() => hideElement(loadingEl), 300);
+        hideElement(loadingEl);
     }
 }
 
 /**
- * Display blog posts with advanced animations
+ * Setup featured article
  */
-async function displayBlogPostsAdvanced(posts) {
-    const postsContainer = document.getElementById('blog-posts');
-    if (!postsContainer) return;
+function setupFeaturedArticle(article) {
+    const featuredEl = document.getElementById('featured-article');
     
-    // Clear existing content
+    // Update featured article content
+    featuredEl.querySelector('.article-category').textContent = article.category;
+    featuredEl.querySelector('.article-reading-time').innerHTML = `<i class="fas fa-clock"></i> ${article.readingTime} min read`;
+    featuredEl.querySelector('.article-date').innerHTML = `<i class="fas fa-calendar"></i> ${formatDate(article.publishedDate)}`;
+    featuredEl.querySelector('.featured-article-title').textContent = article.title;
+    featuredEl.querySelector('.featured-article-excerpt').textContent = article.excerpt;
+    featuredEl.querySelector('.featured-article-image img').src = article.featuredImage;
+    featuredEl.querySelector('.featured-article-image img').alt = article.title;
+    
+    // Store article ID for later use
+    featuredEl.setAttribute('data-article-id', article.id);
+}
+
+/**
+ * Display blog posts in grid
+ */
+function displayBlogPosts(articles) {
+    const postsContainer = document.getElementById('blog-posts');
     postsContainer.innerHTML = '';
     
-    // Create and append post cards with staggered animation
-    posts.forEach((post, index) => {
-        const postCard = createAdvancedPostCard(post);
+    articles.forEach((article, index) => {
+        const postCard = createModernPostCard(article);
         postCard.style.opacity = '0';
-        postCard.style.transform = 'translateY(40px) scale(0.95)';
+        postCard.style.transform = 'translateY(40px)';
         postsContainer.appendChild(postCard);
         
         // Staggered animation
         setTimeout(() => {
-            animateElementIn(postCard, index * 150);
-        }, 100 + (index * 100));
+            postCard.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            postCard.style.opacity = '1';
+            postCard.style.transform = 'translateY(0)';
+        }, 100 + (index * 150));
     });
     
-    // Initialize card interactions after creation
+    // Initialize card interactions
     setTimeout(() => initCardInteractions(), 600);
 }
 
 /**
- * Create advanced blog post card with enhanced features
+ * Create modern blog post card
  */
-function createAdvancedPostCard(post) {
+function createModernPostCard(article) {
     const card = document.createElement('article');
-    card.className = 'blog-post-card';
-    card.setAttribute('data-post-id', post.id);
+    card.className = 'blog-post-card modern-card';
+    card.setAttribute('data-article-id', article.id);
     card.setAttribute('role', 'article');
     card.setAttribute('tabindex', '0');
     
-    // Use excerpt from API if available, otherwise extract from content
-    const excerpt = post.excerpt || extractAdvancedExcerpt(post.content, 150);
-    
-    // Use published date if available, otherwise fall back to created_at
-    const dateToUse = post.published_date || post.created_at;
-    const formattedDate = formatAdvancedDate(dateToUse);
-    const readingTime = calculateReadingTime(post.content);
-    
     card.innerHTML = `
-        <div class="post-header">
-            <div class="post-meta">
-                <span class="post-date" role="text" aria-label="Published date">
-                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                    ${formattedDate}
-                </span>
-                <span class="post-reading-time" role="text" aria-label="Reading time">
-                    <i class="fas fa-clock" aria-hidden="true"></i>
-                    ${readingTime} min read
-                </span>
-                <span class="post-category" role="text" aria-label="Category">
-                    <i class="fas fa-tag" aria-hidden="true"></i>
-                    Maritime Insights
-                </span>
-            </div>
-            <h2 class="post-title">${post.title}</h2>
-        </div>
-        
-        <div class="post-content">
-            <div class="post-excerpt">
-                ${excerpt}
+        <div class="card-image">
+            <img src="${article.featuredImage}" alt="${article.title}" loading="lazy">
+            <div class="card-overlay">
+                <span class="category-badge">${article.category}</span>
             </div>
         </div>
-        
-        <div class="post-footer">
-            <button class="btn btn-outline read-more-btn" 
-                    onclick="readFullPost('${post.id}')"
-                    aria-label="Read full article: ${post.title}">
-                <span>Read Full Article</span>
-                <i class="fas fa-arrow-right" aria-hidden="true"></i>
-            </button>
+        <div class="card-content">
+            <div class="card-meta">
+                <span class="reading-time">
+                    <i class="fas fa-clock"></i>
+                    ${article.readingTime} min
+                </span>
+                <span class="publish-date">
+                    <i class="fas fa-calendar"></i>
+                    ${formatDate(article.publishedDate)}
+                </span>
+            </div>
+            <h2 class="card-title">${article.title}</h2>
+            <p class="card-excerpt">${article.excerpt}</p>
+            <div class="card-tags">
+                ${article.tags.slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <div class="card-footer">
+                <div class="author-info">
+                    <img src="${article.author.avatar}" alt="${article.author.name}" class="author-avatar">
+                    <div class="author-details">
+                        <span class="author-name">${article.author.name}</span>
+                        <span class="author-title">${article.author.title}</span>
+                    </div>
+                </div>
+                <button class="read-more-btn" onclick="openArticle('${article.id}')" aria-label="Read article: ${article.title}">
+                    <span>Read More</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
         </div>
     `;
     
@@ -176,79 +222,658 @@ function createAdvancedPostCard(post) {
 }
 
 /**
- * Enhanced excerpt extraction with intelligent truncation
+ * Open featured article
  */
-function extractAdvancedExcerpt(htmlContent, maxLength) {
-    // Remove HTML tags and get plain text
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlContent;
-    const text = tempDiv.textContent || tempDiv.innerText || '';
-    
-    if (text.length <= maxLength) {
-        return text;
+function openFeaturedArticle() {
+    const featuredEl = document.getElementById('featured-article');
+    const articleId = featuredEl.getAttribute('data-article-id');
+    if (articleId) {
+        openArticle(articleId);
     }
-    
-    // Find the last complete sentence within the limit
-    const truncated = text.substr(0, maxLength);
-    const lastSentence = truncated.lastIndexOf('.');
-    const lastSpace = truncated.lastIndexOf(' ');
-    
-    if (lastSentence > maxLength * 0.7) {
-        return text.substr(0, lastSentence + 1);
-    } else if (lastSpace > 0) {
-        return truncated.substr(0, lastSpace) + '...';
-    }
-    
-    return truncated + '...';
 }
 
 /**
- * Advanced date formatting with relative dates
+ * Open article in new page
  */
-function formatAdvancedDate(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+async function openArticle(articleId) {
+    try {
+        const article = BLOG_CONFIG.articles.find(a => a.id === articleId);
+        if (!article) {
+            throw new Error('Article not found');
+        }
+        
+        // Navigate to article page instead of opening modal
+        const articleUrl = `./blog/${article.slug}/${article.slug}.html`;
+        window.location.href = articleUrl;
+        
+    } catch (error) {
+        console.error('Error opening article:', error);
+        showNotification('Failed to load article. Please try again.', 'error');
+    }
+}
+
+/**
+ * Load markdown content from file
+ */
+async function loadMarkdownContent(slug) {
+    try {
+        const markdownUrl = `${BLOG_CONFIG.basePath}${slug}/${slug}.md`;
+        console.log('Loading markdown from:', markdownUrl);
+        
+        const response = await fetch(markdownUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} for URL: ${markdownUrl}`);
+        }
+        
+        const content = await response.text();
+        console.log('Markdown loaded successfully, length:', content.length);
+        return content;
+    } catch (error) {
+        console.error('Error loading markdown:', error);
+        throw error;
+    }
+}
+
+/**
+ * Display article content with enhanced markdown parsing
+ */
+async function displayArticleContent(article, markdownContent) {
+    const modal = document.getElementById('article-modal');
     
-    if (diffDays === 1) {
-        return 'Yesterday';
-    } else if (diffDays < 7) {
-        return `${diffDays} days ago`;
-    } else if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+    // Update article header
+    modal.querySelector('.article-category').textContent = article.category;
+    modal.querySelector('.article-reading-time').innerHTML = `<i class="fas fa-clock"></i> ${article.readingTime} min read`;
+    modal.querySelector('.article-date').innerHTML = `<i class="fas fa-calendar"></i> ${formatDate(article.publishedDate)}`;
+    modal.querySelector('.article-title').textContent = article.title;
+    
+    // Parse markdown with enhanced features
+    const htmlContent = await parseMarkdownWithImages(markdownContent, article.id);
+    
+    // Display content
+    const contentEl = modal.querySelector('#article-content-body');
+    contentEl.innerHTML = htmlContent;
+    
+    // Update tags
+    updateArticleTags(article.tags);
+    
+    // Highlight code blocks
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightAllUnder(contentEl);
+    }
+}
+
+/**
+ * Parse markdown with basic image support
+ */
+async function parseMarkdownWithImages(markdown, articleId) {
+    // Debug: Check what marked looks like
+    console.log('marked type:', typeof marked);
+    console.log('marked object:', marked);
+    console.log('window.marked type:', typeof window.marked);
+    
+    // Check if marked is available
+    if (typeof marked === 'undefined' && typeof window.marked === 'undefined') {
+        console.error('Marked library not loaded, using basic HTML conversion');
+        return markdown.replace(/\n/g, '<br>').replace(/^# (.*$)/gm, '<h1>$1</h1>').replace(/^## (.*$)/gm, '<h2>$1</h2>');
+    }
+    
+    // Get the marked function with various fallbacks
+    let markedParser, RendererClass;
+    
+    if (typeof marked !== 'undefined') {
+        if (typeof marked === 'function') {
+            markedParser = marked;
+            RendererClass = marked.Renderer;
+        } else if (marked.parse && typeof marked.parse === 'function') {
+            markedParser = marked.parse;
+            RendererClass = marked.Renderer;
+        } else if (marked.marked && typeof marked.marked === 'function') {
+            markedParser = marked.marked;
+            RendererClass = marked.Renderer || marked.marked.Renderer;
+        }
+    } else if (window.marked) {
+        if (typeof window.marked === 'function') {
+            markedParser = window.marked;
+            RendererClass = window.marked.Renderer;
+        } else if (window.marked.parse) {
+            markedParser = window.marked.parse;
+            RendererClass = window.marked.Renderer;
+        }
+    }
+    
+    if (!markedParser) {
+        console.error('Could not find marked parser function');
+        return markdown.replace(/\n/g, '<br>').replace(/^# (.*$)/gm, '<h1>$1</h1>').replace(/^## (.*$)/gm, '<h2>$1</h2>');
+    }
+    
+    console.log('Selected parser type:', typeof markedParser);
+    console.log('Selected renderer class:', RendererClass);
+    
+    // Configure marked for better parsing
+    if (marked && marked.setOptions) {
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: true,
+            headerPrefix: 'heading-'
+        });
+    }
+    
+    // Custom renderer for images
+    let renderer;
+    if (RendererClass) {
+        renderer = new RendererClass();
     } else {
-        const options = { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+        // Fallback renderer object
+        renderer = {
+            image: function(href, title, text) {
+                const imageHref = typeof href === 'string' ? href : (href.href || href.src || '');
+                const imageTitle = typeof title === 'string' ? title : (title.title || '');
+                const imageText = typeof text === 'string' ? text : (text.text || text.alt || '');
+                return `<img src="${imageHref}" alt="${imageText}" title="${imageTitle || ''}" />`;
+            },
+            heading: function(text, level) {
+                const headingText = typeof text === 'string' ? text : (text.text || text.raw || String(text));
+                const headingLevel = typeof level === 'number' ? level : (level.depth || 1);
+                const id = `heading-${headingText.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-')}`;
+                return `<h${headingLevel} id="${id}" class="article-heading">${headingText}</h${headingLevel}>`;
+            },
+            table: function(header, body) {
+                const tableHeader = typeof header === 'string' ? header : (header.header || header.text || '');
+                const tableBody = typeof body === 'string' ? body : (body.body || body.text || '');
+                return `<table class="article-table"><thead>${tableHeader}</thead><tbody>${tableBody}</tbody></table>`;
+            }
         };
-        return date.toLocaleDateString('en-US', options);
+    }
+    
+    // Set up custom renderer methods
+    renderer.image = function(href, title, text) {
+        // Handle different marked.js versions - parameters might be objects
+        const imageHref = typeof href === 'string' ? href : (href && (href.href || href.src || '')) || '';
+        const imageTitle = title ? (typeof title === 'string' ? title : (title.title || '')) : '';
+        const imageText = typeof text === 'string' ? text : (text && (text.text || text.alt || '')) || '';
+        
+        const caption = imageTitle || imageText || '';
+        
+        return `
+            <figure class="article-image">
+                <img src="${imageHref}" alt="${imageText}" title="${imageTitle || ''}" loading="lazy">
+                ${caption ? `<figcaption>${caption}</figcaption>` : ''}
+            </figure>
+        `;
+    };
+    
+    renderer.heading = function(text, level, raw, slugger) {
+        // Debug: Log the actual parameters received
+        console.log('Heading renderer called with:', { text, level, raw, slugger });
+        console.log('text type:', typeof text, 'text value:', text);
+        console.log('level type:', typeof level, 'level value:', level);
+        
+        let headingText = text;
+        let headingLevel = level;
+        
+        // Handle if first param is object (tokens in some versions)
+        if (typeof text === 'object' && text !== null) {
+            headingText = text.text || text.raw || String(text);
+            headingLevel = text.depth || text.level || 1;
+        } else if (typeof level !== 'number' && level != null) {
+            // If level is object, adjust
+            headingLevel = level.depth || level.level || 1;
+        } else {
+            headingLevel = headingLevel || 1;
+        }
+        
+        // Fallback if text is not string
+        if (typeof headingText !== 'string') {
+            headingText = String(headingText);
+        }
+        
+        console.log('Processed heading text:', headingText, 'level:', headingLevel);
+        
+        const id = `heading-${headingText.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-')}`;
+        return `<h${headingLevel} id="${id}" class="article-heading">${headingText}</h${headingLevel}>`;
+    };
+    
+    renderer.table = function(header, body) {
+        // Handle different marked.js versions - parameters might be objects
+        const tableHeader = typeof header === 'string' ? header : (header && (header.header || header.text || '')) || '';
+        const tableBody = typeof body === 'string' ? body : (body && (body.body || body.text || '')) || '';
+        
+        return `
+            <div class="table-wrapper">
+                <table class="article-table">
+                    <thead>${tableHeader}</thead>
+                    <tbody>${tableBody}</tbody>
+                </table>
+            </div>
+        `;
+    };
+    
+    // Parse with custom renderer
+    console.log('About to parse with:', typeof markedParser, 'renderer:', typeof renderer);
+    let html = markedParser(markdown, { renderer });
+    
+    // Post-process HTML for additional enhancements
+    html = enhanceArticleHTML(html);
+    
+    return html;
+}
+
+
+
+/**
+ * Enhance article HTML with additional features
+ */
+function enhanceArticleHTML(html) {
+    // Add reading anchors for sections
+    html = html.replace(/<h([2-6])/g, '<h$1 class="section-heading"');
+    
+    // Enhance tables
+    html = html.replace(/<table>/g, '<div class="table-container"><table class="enhanced-table">');
+    html = html.replace(/<\/table>/g, '</table></div>');
+    
+    // Add copy buttons to code blocks
+    html = html.replace(/<pre><code/g, '<div class="code-container"><button class="copy-code-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button><pre><code');
+    html = html.replace(/<\/code><\/pre>/g, '</code></pre></div>');
+    
+    // Enhance lists with icons
+    html = html.replace(/<ul>/g, '<ul class="enhanced-list">');
+    
+    return html;
+}
+
+/**
+ * Setup table of contents
+ */
+function setupTableOfContents() {
+    const headings = document.querySelectorAll('#article-content-body h2, #article-content-body h3, #article-content-body h4');
+    const tocContainer = document.getElementById('table-of-contents');
+    const tocContent = tocContainer.querySelector('.toc-content');
+    
+    if (headings.length > 2) {
+        tocElements = Array.from(headings);
+        
+        const tocHTML = tocElements.map(heading => {
+            const level = parseInt(heading.tagName.charAt(1));
+            const text = heading.textContent;
+            const id = heading.id || `toc-${text.toLowerCase().replace(/\s+/g, '-')}`;
+            heading.id = id;
+            
+            return `
+                <div class="toc-item toc-level-${level}">
+                    <a href="#${id}" onclick="scrollToHeading('${id}')">${text}</a>
+                </div>
+            `;
+        }).join('');
+        
+        tocContent.innerHTML = tocHTML;
+        tocContainer.style.display = 'block';
+    } else {
+        tocContainer.style.display = 'none';
     }
 }
 
 /**
- * Calculate reading time based on content
+ * Setup reading progress indicator
  */
-function calculateReadingTime(content) {
-    const wordsPerMinute = 200;
-    const words = content.trim().split(/\s+/).length;
-    const readingTime = Math.ceil(words / wordsPerMinute);
-    return Math.max(1, readingTime);
+function setupReadingProgress() {
+    const progressBar = document.getElementById('reading-progress');
+    const articleContent = document.getElementById('article-content-body');
+    
+    if (!progressBar || !articleContent) return;
+    
+    const updateProgress = () => {
+        const modal = document.getElementById('article-modal');
+        if (modal.style.display === 'none') return;
+        
+        const scrollTop = modal.scrollTop;
+        const scrollHeight = modal.scrollHeight - modal.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+        readingProgress = progress;
+        
+        // Update TOC active state
+        updateTOCActiveState();
+    };
+    
+    const modal = document.getElementById('article-modal');
+    modal.addEventListener('scroll', updateProgress);
+    
+    // Initial update
+    updateProgress();
 }
 
 /**
- * Animate counter with easing
+ * Update table of contents active state
  */
+function updateTOCActiveState() {
+    if (tocElements.length === 0) return;
+    
+    const scrollPosition = document.getElementById('article-modal').scrollTop + 100;
+    
+    let activeIndex = 0;
+    for (let i = 0; i < tocElements.length; i++) {
+        if (tocElements[i].offsetTop <= scrollPosition) {
+            activeIndex = i;
+        }
+    }
+    
+    // Update active states
+    document.querySelectorAll('.toc-item').forEach((item, index) => {
+        item.classList.toggle('active', index === activeIndex);
+    });
+}
+
+/**
+ * Scroll to heading
+ */
+function scrollToHeading(id) {
+    const element = document.getElementById(id);
+    const modal = document.getElementById('article-modal');
+    
+    if (element && modal) {
+        const offsetTop = element.offsetTop - 100;
+        modal.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
+/**
+ * Show article modal
+ */
+function showArticleModal() {
+    const modal = document.getElementById('article-modal');
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
+    
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+    
+    // Focus management
+    setTimeout(() => {
+        const firstHeading = modal.querySelector('h1, h2');
+        if (firstHeading) {
+            firstHeading.focus();
+        }
+    }, 300);
+    
+    // Announce to screen readers
+    if (currentArticle) {
+        announceToScreenReader(`Article opened: ${currentArticle.title}`);
+    }
+}
+
+/**
+ * Hide article modal
+ */
+function hideArticleModal() {
+    const modal = document.getElementById('article-modal');
+    modal.classList.remove('active');
+    
+    setTimeout(() => {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.documentElement.classList.remove('modal-open');
+    }, 300);
+    
+    // Reset progress
+    document.getElementById('reading-progress').style.width = '0%';
+    
+    // Clear current article
+    currentArticle = null;
+    tocElements = [];
+    
+    // Announce to screen readers
+    announceToScreenReader('Article modal closed');
+}
+
+/**
+ * Article sharing functionality
+ */
+function shareArticle(platform) {
+    if (!currentArticle) return;
+    
+    const url = window.location.href;
+    const title = currentArticle.title;
+    const text = currentArticle.excerpt;
+    
+    const shareUrls = {
+        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+        email: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text + '\n\n' + url)}`
+    };
+    
+    if (shareUrls[platform]) {
+        window.open(shareUrls[platform], '_blank', 'width=550,height=400');
+        trackSocialShare(platform, currentArticle.id);
+    }
+}
+
+/**
+ * Copy article link
+ */
+function copyArticleLink() {
+    const url = window.location.href;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+            showNotification('Link copied to clipboard!', 'success');
+        }).catch(() => {
+            fallbackCopyToClipboard(url);
+        });
+    } else {
+        fallbackCopyToClipboard(url);
+    }
+}
+
+/**
+ * Fallback copy to clipboard
+ */
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showNotification('Link copied to clipboard!', 'success');
+    } catch (err) {
+        showNotification('Failed to copy link', 'error');
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+/**
+ * Update article tags
+ */
+function updateArticleTags(tags) {
+    const tagsContainer = document.getElementById('article-tags');
+    tagsContainer.innerHTML = tags.map(tag => 
+        `<span class="article-tag">${tag}</span>`
+    ).join('');
+}
+
+/**
+ * Initialize card interactions
+ */
+function initCardInteractions() {
+    const cards = document.querySelectorAll('.blog-post-card');
+    
+    cards.forEach(card => {
+        // Hover effects
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        // Keyboard navigation
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const articleId = card.getAttribute('data-article-id');
+                if (articleId) {
+                    openArticle(articleId);
+                }
+            }
+        });
+        
+        // Click handling
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.read-more-btn')) {
+                const articleId = card.getAttribute('data-article-id');
+                if (articleId) {
+                    openArticle(articleId);
+                }
+            }
+        });
+    });
+}
+
+/**
+ * Setup scroll animations
+ */
+function setupScrollAnimations() {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Hero animation
+        gsap.from('.blog-hero-content', {
+            duration: 1.2,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out',
+            delay: 0.3
+        });
+        
+        // Stats animation
+        gsap.from('.stat-item', {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'back.out(1.7)',
+            delay: 0.8
+        });
+        
+        // Featured article animation
+        gsap.from('.featured-article-content', {
+            scrollTrigger: {
+                trigger: '.featured-article',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+        
+        // Newsletter animation
+        gsap.from('.newsletter-content', {
+            scrollTrigger: {
+                trigger: '.newsletter-signup',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+    }
+}
+
+/**
+ * Setup event listeners
+ */
+function setupEventListeners() {
+    // Modal close handlers
+    const modal = document.getElementById('article-modal');
+    const closeBtn = modal.querySelector('.modal-close');
+    
+    closeBtn.addEventListener('click', hideArticleModal);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideArticleModal();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            hideArticleModal();
+        }
+    });
+}
+
+/**
+ * Initialize image lazy loading
+ */
+function initializeImageLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                }
+            });
+        });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+}
+
+/**
+ * Show article loading state
+ */
+function showArticleLoadingState() {
+    const modal = document.getElementById('article-modal');
+    modal.querySelector('#article-content-body').innerHTML = `
+        <div class="article-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading article...</p>
+        </div>
+    `;
+    showArticleModal();
+}
+
+/**
+ * Utility functions
+ */
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
 function animateCounter(element, start, end, duration) {
     const startTime = performance.now();
     
     function updateCounter(currentTime) {
         const elapsedTime = currentTime - startTime;
         const progress = Math.min(elapsedTime / duration, 1);
-        
-        // Easing function (ease-out cubic)
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         const currentValue = Math.floor(start + (end - start) * easeProgress);
         
@@ -256,364 +881,12 @@ function animateCounter(element, start, end, duration) {
         
         if (progress < 1) {
             requestAnimationFrame(updateCounter);
-        } else {
-            element.textContent = end;
         }
     }
     
     requestAnimationFrame(updateCounter);
 }
 
-/**
- * Animate element entrance
- */
-function animateElementIn(element, delay = 0) {
-    setTimeout(() => {
-        element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        element.style.opacity = '1';
-        element.style.transform = 'translateY(0) scale(1)';
-    }, delay);
-}
-
-/**
- * Initialize advanced animations using GSAP
- */
-function initAdvancedAnimations() {
-    // Check if GSAP is available
-    if (typeof gsap === 'undefined') {
-        console.log('GSAP not loaded, using CSS fallbacks');
-        return;
-    }
-    
-    // Hero section animation
-    gsap.from('.blog-hero-content', {
-        duration: 1.2,
-        y: 50,
-        opacity: 0,
-        ease: 'power3.out',
-        delay: 0.3
-    });
-    
-    // Stats animation
-    gsap.from('.stat-item', {
-        duration: 0.8,
-        y: 30,
-        opacity: 0,
-        stagger: 0.2,
-        ease: 'back.out(1.7)',
-        delay: 0.8
-    });
-}
-
-/**
- * Initialize scroll-triggered animations
- */
-function initScrollTriggers() {
-    if (typeof ScrollTrigger === 'undefined') {
-        console.log('ScrollTrigger not loaded, using intersection observer fallback');
-        initIntersectionObserver();
-        return;
-    }
-    
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Newsletter section animation
-    gsap.from('.newsletter-content', {
-        scrollTrigger: {
-            trigger: '.newsletter-signup',
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-        },
-        duration: 1,
-        y: 50,
-        opacity: 0,
-        ease: 'power3.out'
-    });
-}
-
-/**
- * Fallback intersection observer for scroll animations
- */
-function initIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    // Observe elements for animation
-    document.querySelectorAll('.newsletter-content, .blog-post-card').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-/**
- * Initialize sophisticated micro-interactions
- */
-function initMicroInteractions() {
-    // Enhanced card interactions
-    initCardInteractions();
-    
-    // Button interactions
-    initButtonInteractions();
-    
-    // Form interactions
-    initFormInteractions();
-}
-
-/**
- * Advanced card interaction system
- */
-function initCardInteractions() {
-    const cards = document.querySelectorAll('.blog-post-card');
-    
-    cards.forEach(card => {
-        // Simple pop-out effect on hover
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-8px) scale(1.02)';
-            card.style.boxShadow = 'var(--shadow-2xl)';
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0) scale(1)';
-            card.style.boxShadow = 'var(--shadow-lg)';
-        });
-        
-        // Keyboard navigation
-        card.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                const readMoreBtn = card.querySelector('.read-more-btn');
-                if (readMoreBtn) {
-                    readMoreBtn.click();
-                }
-            }
-        });
-    });
-}
-
-/**
- * Advanced button interactions
- */
-function initButtonInteractions() {
-    const buttons = document.querySelectorAll('.read-more-btn, .btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-            button.style.transform = 'translateY(-2px) scale(1.02)';
-        });
-        
-        button.addEventListener('mouseleave', () => {
-            button.style.transform = 'translateY(0) scale(1)';
-        });
-        
-        button.addEventListener('mousedown', () => {
-            button.style.transform = 'translateY(0) scale(0.98)';
-        });
-        
-        button.addEventListener('mouseup', () => {
-            button.style.transform = 'translateY(-2px) scale(1.02)';
-        });
-    });
-}
-
-/**
- * Enhanced form interactions
- */
-function initFormInteractions() {
-    const formControls = document.querySelectorAll('.form-control');
-    
-    formControls.forEach(control => {
-        control.addEventListener('focus', () => {
-            const formGroup = control.closest('.form-group');
-            if (formGroup) {
-                formGroup.classList.add('focused');
-            }
-        });
-        
-        control.addEventListener('blur', () => {
-            const formGroup = control.closest('.form-group');
-            if (formGroup) {
-                formGroup.classList.remove('focused');
-            }
-        });
-    });
-}
-
-/**
- * Performance optimizations
- */
-function initPerformanceOptimizations() {
-    // Preload critical images
-    preloadCriticalImages();
-    
-    // Optimize scroll listeners
-    optimizeScrollListeners();
-    
-    // Lazy load non-critical elements
-    initLazyLoading();
-}
-
-/**
- * Preload critical images for better performance
- */
-function preloadCriticalImages() {
-    const criticalImages = [
-        '/assets/marinestream_logo_white.png',
-        '/assets/marinestream_logo_blue.png'
-    ];
-    
-    criticalImages.forEach(src => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = src;
-        document.head.appendChild(link);
-    });
-}
-
-/**
- * Optimize scroll listeners with throttling
- */
-function optimizeScrollListeners() {
-    let ticking = false;
-    
-    function updateScrollEffects() {
-        // Add scroll-based effects here
-        ticking = false;
-    }
-    
-    function requestTick() {
-        if (!ticking) {
-            requestAnimationFrame(updateScrollEffects);
-            ticking = true;
-        }
-    }
-    
-    window.addEventListener('scroll', requestTick, { passive: true });
-}
-
-/**
- * Initialize lazy loading for better performance
- */
-function initLazyLoading() {
-    if ('IntersectionObserver' in window) {
-        const lazyImages = document.querySelectorAll('img[data-src]');
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.remove('lazy');
-                    imageObserver.unobserve(img);
-                }
-            });
-        });
-        
-        lazyImages.forEach(img => imageObserver.observe(img));
-    }
-}
-
-/**
- * Accessibility enhancements
- */
-function initAccessibilityEnhancements() {
-    // Keyboard navigation improvements
-    initKeyboardNavigation();
-    
-    // Screen reader enhancements
-    initScreenReaderSupport();
-    
-    // Focus management
-    initFocusManagement();
-}
-
-/**
- * Enhanced keyboard navigation
- */
-function initKeyboardNavigation() {
-    document.addEventListener('keydown', (e) => {
-        // Escape key to close modals
-        if (e.key === 'Escape') {
-            // hideSubscribeModal(); // This function is removed
-        }
-        
-        // Tab navigation improvements
-        if (e.key === 'Tab') {
-            document.body.classList.add('keyboard-navigation');
-        }
-    });
-    
-    document.addEventListener('mousedown', () => {
-        document.body.classList.remove('keyboard-navigation');
-    });
-}
-
-/**
- * Screen reader support enhancements
- */
-function initScreenReaderSupport() {
-    // Announce dynamic content changes
-    const announcer = document.createElement('div');
-    announcer.setAttribute('aria-live', 'polite');
-    announcer.setAttribute('aria-atomic', 'true');
-    announcer.className = 'sr-only';
-    document.body.appendChild(announcer);
-    
-    window.announceToScreenReader = (message) => {
-        announcer.textContent = message;
-        setTimeout(() => {
-            announcer.textContent = '';
-        }, 1000);
-    };
-}
-
-/**
- * Focus management for modals and interactions
- */
-function initFocusManagement() {
-    const modals = document.querySelectorAll('.modal-overlay');
-    
-    modals.forEach(modal => {
-        modal.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                trapFocus(modal, e);
-            }
-        });
-    });
-}
-
-/**
- * Trap focus within modal
- */
-function trapFocus(modal, event) {
-    const focusableElements = modal.querySelectorAll(
-        'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
-    );
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-    
-    if (event.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-            lastFocusable.focus();
-            event.preventDefault();
-        }
-    } else {
-        if (document.activeElement === lastFocusable) {
-            firstFocusable.focus();
-            event.preventDefault();
-        }
-    }
-}
-
-/**
- * Enhanced utility functions
- */
 function showElement(element) {
     if (element) {
         element.style.display = 'block';
@@ -628,165 +901,71 @@ function hideElement(element) {
     }
 }
 
-/**
- * Enhanced read full post functionality
- */
-async function readFullPost(postId) {
-    console.log('Reading full post:', postId);
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type} show`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
     
-    try {
-        // Show loading state
-        // showAdvancedNotification('Loading article...', 'info'); // This function is removed
-        
-        // Fetch the full blog post from API
-        const response = await fetch(`/api/blog/${postId}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (!data.success) {
-            throw new Error(data.message || 'Failed to load blog post');
-        }
-        
-        // Display the full article in a modal
-        showFullArticleModal(data.post);
-        
-        // Analytics tracking (implement as needed)
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'blog_post_click', {
-                'post_id': postId,
-                'event_category': 'engagement'
-            });
-        }
-        
-    } catch (error) {
-        console.error('Error loading full post:', error);
-        // showAdvancedNotification('Failed to load article. Please try again.', 'error'); // This function is removed
-    }
-}
-
-/**
- * Show full article modal with enhanced features
- */
-function showFullArticleModal(post) {
-    // Create modal if it doesn't exist
-    let articleModal = document.getElementById('article-modal');
-    if (!articleModal) {
-        articleModal = document.createElement('div');
-        articleModal.id = 'article-modal';
-        articleModal.className = 'modal-overlay article-modal';
-        articleModal.innerHTML = `
-            <div class="modal-content article-content">
-                <div class="modal-header">
-                    <h2 class="article-title"></h2>
-                    <button class="modal-close" aria-label="Close article">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="article-meta">
-                        <span class="article-date"></span>
-                        <span class="article-reading-time"></span>
-                    </div>
-                    <div class="article-content-body"></div>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(articleModal);
-        
-        // Add event listeners
-        articleModal.addEventListener('click', (e) => {
-            if (e.target === articleModal) {
-                hideFullArticleModal();
-            }
-        });
-        
-        const closeBtn = articleModal.querySelector('.modal-close');
-        closeBtn.addEventListener('click', hideFullArticleModal);
-    }
-    
-    // Populate modal content
-    const titleEl = articleModal.querySelector('.article-title');
-    const dateEl = articleModal.querySelector('.article-date');
-    const readingTimeEl = articleModal.querySelector('.article-reading-time');
-    const contentEl = articleModal.querySelector('.article-content-body');
-    
-    titleEl.textContent = post.title;
-    
-    const dateToUse = post.published_date || post.created_at;
-    const formattedDate = formatAdvancedDate(dateToUse);
-    dateEl.innerHTML = `<i class="fas fa-calendar-alt"></i> ${formattedDate}`;
-    
-    const readingTime = calculateReadingTime(post.content);
-    readingTimeEl.innerHTML = `<i class="fas fa-clock"></i> ${readingTime} min read`;
-    
-    contentEl.innerHTML = post.content;
-    
-    // Show modal with animation
-    articleModal.style.display = 'flex';
-    document.body.classList.add('modal-open');
-    document.documentElement.classList.add('modal-open');
+    document.body.appendChild(notification);
     
     setTimeout(() => {
-        articleModal.classList.add('active');
-    }, 10);
-    
-    // Focus management
-    setTimeout(() => {
-        const firstFocusable = articleModal.querySelector('h1, h2, h3, p, a, button');
-        if (firstFocusable) {
-            firstFocusable.focus();
-        }
-    }, 300);
-    
-    // Announce to screen readers
-    if (window.announceToScreenReader) {
-        window.announceToScreenReader(`Article opened: ${post.title}`);
-    }
-}
-
-/**
- * Hide full article modal
- */
-function hideFullArticleModal() {
-    const articleModal = document.getElementById('article-modal');
-    if (articleModal) {
-        articleModal.classList.remove('active');
-        
+        notification.classList.remove('show');
         setTimeout(() => {
-            articleModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            document.documentElement.classList.remove('modal-open');
+            document.body.removeChild(notification);
         }, 300);
-        
-        // Announce to screen readers
-        if (window.announceToScreenReader) {
-            window.announceToScreenReader('Article modal closed');
-        }
+    }, 3000);
+}
+
+function announceToScreenReader(message) {
+    const announcer = document.querySelector('[aria-live="polite"]');
+    if (announcer) {
+        announcer.textContent = message;
+        setTimeout(() => {
+            announcer.textContent = '';
+        }, 1000);
     }
 }
 
-// Initialize all modal handlers when DOM is ready
-// document.addEventListener('DOMContentLoaded', initModalHandlers); // This line is removed
+// Analytics functions (placeholder)
+function trackArticleView(articleId) {
+    console.log(`Article viewed: ${articleId}`);
+    // Implement analytics tracking here
+}
 
-// --- Unified Modal System Integration ---
-// All auto-popup and cookie logic removed - modal only shows on user request
-
-// Initialize subscribe modal functionality
-document.addEventListener('DOMContentLoaded', function() {
-    initSubscribeModal();
-});
+function trackSocialShare(platform, articleId) {
+    console.log(`Article shared on ${platform}: ${articleId}`);
+    // Implement analytics tracking here
+}
 
 /**
- * Initialize subscribe modal functionality
+ * Copy code functionality
  */
-function initSubscribeModal() {
+function copyCode(button) {
+    const codeBlock = button.nextElementSibling.querySelector('code');
+    const text = codeBlock.textContent;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+        });
+    }
+}
+
+/**
+ * Subscribe modal functionality
+ */
+function initializeSubscribeModal() {
     const subscribeModal = document.getElementById('subscribe-modal');
     const subscribeForm = document.getElementById('subscribe-form');
     const subscribeCloseBtn = document.querySelector('.subscribe-close-btn');
-    const subscribeCancelBtn = document.querySelector('.subscribe-cancel-btn');
     
     if (!subscribeModal || !subscribeForm) return;
     
@@ -795,16 +974,7 @@ function initSubscribeModal() {
     
     // Handle close button
     if (subscribeCloseBtn) {
-        subscribeCloseBtn.addEventListener('click', () => {
-            hideSubscribeModal();
-        });
-    }
-    
-    // Handle cancel button
-    if (subscribeCancelBtn) {
-        subscribeCancelBtn.addEventListener('click', () => {
-            hideSubscribeModal();
-        });
+        subscribeCloseBtn.addEventListener('click', hideSubscribeModal);
     }
     
     // Close modal when clicking outside
@@ -822,9 +992,6 @@ function initSubscribeModal() {
     });
 }
 
-/**
- * Show the subscription modal
- */
 function showSubscribeModal() {
     const subscribeModal = document.getElementById('subscribe-modal');
     if (subscribeModal) {
@@ -833,7 +1000,6 @@ function showSubscribeModal() {
         document.body.classList.add('modal-open');
         document.documentElement.classList.add('modal-open');
         
-        // Focus on first input
         const firstInput = subscribeModal.querySelector('input[type="email"]');
         if (firstInput) {
             setTimeout(() => firstInput.focus(), 100);
@@ -841,9 +1007,6 @@ function showSubscribeModal() {
     }
 }
 
-/**
- * Hide the subscription modal
- */
 function hideSubscribeModal() {
     const subscribeModal = document.getElementById('subscribe-modal');
     if (subscribeModal) {
@@ -856,9 +1019,6 @@ function hideSubscribeModal() {
     }
 }
 
-/**
- * Handle subscription form submission
- */
 async function handleSubscribeSubmit(e) {
     e.preventDefault();
     
@@ -878,43 +1038,14 @@ async function handleSubscribeSubmit(e) {
             throw new Error('Please enter a valid email address');
         }
         
-        // Validate consent
-        const consent = formData.get('subscribe-consent');
-        if (!consent) {
-            throw new Error('Please agree to receive email updates');
-        }
+        // Show success message
+        showSubscribeSuccess();
+        form.reset();
         
-        // Prepare data
-        const data = {
-            email: email,
-            name: formData.get('name') || null,
-            company: formData.get('company') || null,
-            role: formData.get('role') || null
-        };
-        
-        // Send to backend
-        const response = await fetch('/api/subscribe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-            // Show success message
-            showSubscribeSuccess();
-            form.reset();
-            
-            // Hide modal after 3 seconds
-            setTimeout(() => {
-                hideSubscribeModal();
-            }, 3000);
-        } else {
-            throw new Error(result.message || 'Subscription failed. Please try again.');
-        }
+        // Hide modal after 3 seconds
+        setTimeout(() => {
+            hideSubscribeModal();
+        }, 3000);
         
     } catch (error) {
         console.error('Subscription error:', error);
@@ -927,9 +1058,6 @@ async function handleSubscribeSubmit(e) {
     }
 }
 
-/**
- * Show subscription success message
- */
 function showSubscribeSuccess() {
     const modalBody = document.querySelector('.subscribe-modal-body');
     if (modalBody) {
@@ -945,9 +1073,6 @@ function showSubscribeSuccess() {
     }
 }
 
-/**
- * Show subscription error message
- */
 function showSubscribeError(message) {
     const modalBody = document.querySelector('.subscribe-modal-body');
     if (modalBody) {
@@ -960,12 +1085,10 @@ function showSubscribeError(message) {
             </div>
         `;
         
-        // Insert error message at the top of the form
         const form = modalBody.querySelector('.subscribe-form');
         if (form) {
             form.insertBefore(errorDiv, form.firstChild);
             
-            // Remove error message after 5 seconds
             setTimeout(() => {
                 if (errorDiv.parentNode) {
                     errorDiv.remove();
@@ -975,14 +1098,19 @@ function showSubscribeError(message) {
     }
 }
 
-/**
- * Validate email format
- */
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
 // Make functions globally available
+window.openArticle = openArticle;
+window.openFeaturedArticle = openFeaturedArticle;
+window.hideArticleModal = hideArticleModal;
+window.shareArticle = shareArticle;
+window.copyArticleLink = copyArticleLink;
+window.scrollToHeading = scrollToHeading;
+window.copyCode = copyCode;
 window.showSubscribeModal = showSubscribeModal;
 window.hideSubscribeModal = hideSubscribeModal;
+window.loadBlogPosts = loadBlogPosts;

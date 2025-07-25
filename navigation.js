@@ -15,9 +15,9 @@ class MarineStreamNavigation {
                 { href: this.getHomeLink(), text: 'Home', id: 'home' },
                 { href: this.getSectionLink('about'), text: 'About', id: 'about' },
                 { href: this.getSectionLink('dashboard-preview'), text: 'Solutions', id: 'solutions' },
-                { href: './sales.html', text: 'Sales', id: 'sales' },
+                { href: this.getPageLink('sales.html'), text: 'Sales', id: 'sales' },
                 { href: this.getSectionLink('tools'), text: 'Tools', id: 'tools' },
-                { href: './blog.html', text: 'Blog', id: 'blog' },
+                { href: this.getPageLink('blog.html'), text: 'Blog', id: 'blog' },
                 { href: '#', text: 'Subscribe', id: 'subscribe', className: 'btn btn-outline', onclick: 'showSubscribeModal()' },
                 { href: 'https://app.marinestream.io/marinestream', text: 'Get Started', id: 'get-started', className: 'btn btn-primary', target: '_blank', rel: 'noopener noreferrer' }
             ]
@@ -42,7 +42,12 @@ class MarineStreamNavigation {
      * Get the appropriate asset path based on current page
      */
     getAssetPath(asset) {
-        // Use relative paths for all pages
+        // Check if we're in a subdirectory (like blog/article/)
+        const path = window.location.pathname;
+        if (path.includes('/blog/')) {
+            return `../../assets/${asset}`;
+        }
+        // Use relative paths for all other pages
         return `./assets/${asset}`;
     }
 
@@ -64,6 +69,19 @@ class MarineStreamNavigation {
             return `#${section}`;
         }
         return `./index.html#${section}`;
+    }
+
+    /**
+     * Get the page link based on current page location
+     */
+    getPageLink(page) {
+        // Check if we're in a subdirectory (like blog/article/)
+        const path = window.location.pathname;
+        if (path.includes('/blog/')) {
+            return `../../${page}`;
+        }
+        // Use relative paths for all other pages
+        return `./${page}`;
     }
 
     /**
