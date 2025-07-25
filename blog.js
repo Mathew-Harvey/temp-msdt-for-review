@@ -749,6 +749,7 @@ function showSubscribeModal() {
     if (subscribeModal) {
         subscribeModal.style.display = 'flex';
         document.body.classList.add('modal-open');
+        document.documentElement.classList.add('modal-open');
         
         setTimeout(() => {
             subscribeModal.classList.add('active');
@@ -775,6 +776,7 @@ function hideSubscribeModal() {
         setTimeout(() => {
             subscribeModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            document.documentElement.classList.remove('modal-open');
         }, 300);
         
         // Announce to screen readers
@@ -900,6 +902,7 @@ function showFullArticleModal(post) {
     // Show modal with animation
     articleModal.style.display = 'flex';
     document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
     
     setTimeout(() => {
         articleModal.classList.add('active');
@@ -930,6 +933,7 @@ function hideFullArticleModal() {
         setTimeout(() => {
             articleModal.style.display = 'none';
             document.body.classList.remove('modal-open');
+            document.documentElement.classList.remove('modal-open');
         }, 300);
         
         // Announce to screen readers
@@ -941,3 +945,6 @@ function hideFullArticleModal() {
 
 // Initialize all modal handlers when DOM is ready
 document.addEventListener('DOMContentLoaded', initModalHandlers);
+
+// --- Unified Modal System Integration ---
+// All auto-popup and cookie logic removed - modal only shows on user request

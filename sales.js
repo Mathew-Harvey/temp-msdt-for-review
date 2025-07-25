@@ -907,4 +907,8 @@ document.getElementById('detailModal').addEventListener('click', function(e) {
     }
 });
 
+// --- Newsletter Subscribe Modal Logic (copied/adapted from blog.js) ---
+// --- Unified Modal System Integration ---
+// All auto-popup and cookie logic removed - modal only shows on user request
+
 

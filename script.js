@@ -17,6 +17,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Safety: Remove any stuck modal-open class on page load
     document.body.classList.remove('modal-open');
+    document.documentElement.classList.remove('modal-open');
     document.body.classList.remove('mobile-menu-open');
     
     // Force enable scrolling
@@ -62,12 +63,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (show) {
             modalElement.classList.add('active'); // Use class for visibility
             document.body.classList.add('modal-open');
+            document.documentElement.classList.add('modal-open');
         } else {
             modalElement.classList.remove('active');
             // Only remove body class if no other modals are active
             const activeModals = document.querySelectorAll('.modal-overlay.active');
             if (activeModals.length === 0) {
                 document.body.classList.remove('modal-open');
+                document.documentElement.classList.remove('modal-open');
             }
         }
     }
@@ -239,6 +242,7 @@ if (openCostCalculatorBtn && calculatorIframe) {
         console.log('Opening hull calculator iframe');
         calculatorIframe.style.display = 'block';
         document.body.classList.add('modal-open');
+        document.documentElement.classList.add('modal-open');
         
         // Wait a moment for iframe to be visible, then send message
         setTimeout(() => {
@@ -254,6 +258,7 @@ window.addEventListener('message', function(event) {
         if (iframe) {
             iframe.style.display = 'none';
             document.body.classList.remove('modal-open');
+            document.documentElement.classList.remove('modal-open');
         }
     }
 });
@@ -611,6 +616,7 @@ function checkForThankYouParameter() {
                  // Fallback if called before DOMContentLoaded finishes
                  thankYouModal.style.display = 'flex';
                  document.body.classList.add('modal-open');
+                 document.documentElement.classList.add('modal-open');
             }
 
             // Clear the parameter from URL without page refresh
@@ -646,6 +652,7 @@ function initModals() {
             } else {
                 modalElement.style.display = 'none';
                 document.body.classList.remove('modal-open');
+                document.documentElement.classList.remove('modal-open');
             }
         };
 
@@ -1013,6 +1020,8 @@ function showEmailFallback(messageBody, subject = "MarineStream Inquiry") {
              toggleModal(fallbackModal, true);
         } else {
             fallbackModal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+            document.documentElement.classList.add('modal-open');
         }
 
         if (copyEmailBtn) {
@@ -1340,13 +1349,7 @@ function initSubscriptionModal() {
     
     if (!subscribeModal || !subscribeForm) return;
     
-    // Show modal after 5 seconds on first visit
-    const hasShownModal = sessionStorage.getItem('subscribeModalShown');
-    if (!hasShownModal) {
-        setTimeout(() => {
-            showSubscribeModal();
-        }, 5000);
-    }
+    // Auto-popup logic removed - modal only shows on user request
     
     // Handle form submission
     subscribeForm.addEventListener('submit', handleSubscribeSubmit);
@@ -1383,7 +1386,7 @@ function showSubscribeModal() {
         subscribeModal.style.display = 'flex';
         subscribeModal.classList.add('active');
         document.body.classList.add('modal-open');
-        sessionStorage.setItem('subscribeModalShown', 'true');
+        document.documentElement.classList.add('modal-open');
         
         // Focus on first input
         const firstInput = subscribeModal.querySelector('input[type="email"]');
@@ -1401,6 +1404,7 @@ function hideSubscribeModal() {
     if (subscribeModal) {
         subscribeModal.classList.remove('active');
         document.body.classList.remove('modal-open');
+        document.documentElement.classList.remove('modal-open');
         setTimeout(() => {
             subscribeModal.style.display = 'none';
         }, 300);
@@ -1506,3 +1510,356 @@ function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
+
+/**
+ * Unified Modal System
+ * Provides consistent modal functionality across all pages
+ */
+class ModalSystem {
+    constructor() {
+        this.activeModal = null;
+        this.modalStack = [];
+        this.init();
+    }
+
+    init() {
+        // Create global modal container if it doesn't exist
+        this.createGlobalModalContainer();
+        
+        // Add global event listeners
+        this.addGlobalEventListeners();
+        
+        // Initialize existing modals
+        this.initializeExistingModals();
+    }
+
+    createGlobalModalContainer() {
+        if (!document.getElementById('global-modal-container')) {
+            const container = document.createElement('div');
+            container.id = 'global-modal-container';
+            container.className = 'global-modal-container';
+            document.body.appendChild(container);
+        }
+    }
+
+    addGlobalEventListeners() {
+        // Escape key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.activeModal) {
+                this.closeModal(this.activeModal);
+            }
+        });
+
+        // Prevent body scroll when modal is open
+        document.addEventListener('DOMContentLoaded', () => {
+            this.manageBodyScroll();
+        });
+    }
+
+    initializeExistingModals() {
+        // Initialize existing modals on the page
+        const existingModals = document.querySelectorAll('.modal-overlay');
+        existingModals.forEach(modal => {
+            this.setupModal(modal);
+        });
+    }
+
+    setupModal(modal) {
+        // Add proper ARIA attributes
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-hidden', 'true');
+
+        // Setup close button
+        const closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.setAttribute('aria-label', 'Close modal');
+            closeBtn.addEventListener('click', () => this.closeModal(modal));
+        }
+
+        // Setup overlay click to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closeModal(modal);
+            }
+        });
+
+        // Setup form handling
+        const form = modal.querySelector('form');
+        if (form) {
+            this.setupFormHandling(form, modal);
+        }
+    }
+
+    setupFormHandling(form, modal) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmission(form, modal);
+        });
+
+        // Add form validation
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => this.clearFieldError(input));
+        });
+    }
+
+    validateField(field) {
+        const value = field.value.trim();
+        const isRequired = field.hasAttribute('required');
+        
+        if (isRequired && !value) {
+            this.showFieldError(field, 'This field is required');
+            return false;
+        }
+
+        if (field.type === 'email' && value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                this.showFieldError(field, 'Please enter a valid email address');
+                return false;
+            }
+        }
+
+        this.clearFieldError(field);
+        return true;
+    }
+
+    showFieldError(field, message) {
+        this.clearFieldError(field);
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'field-error';
+        errorDiv.textContent = message;
+        errorDiv.setAttribute('role', 'alert');
+        
+        field.parentNode.appendChild(errorDiv);
+        field.classList.add('error');
+    }
+
+    clearFieldError(field) {
+        const errorDiv = field.parentNode.querySelector('.field-error');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+        field.classList.remove('error');
+    }
+
+    async handleFormSubmission(form, modal) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Validate all fields
+        const inputs = form.querySelectorAll('input, select, textarea');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (!this.validateField(input)) {
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            return;
+        }
+
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate API call (replace with actual endpoint)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Success state
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Submitted!';
+            submitBtn.style.background = '#10b981';
+            
+            // Show success notification
+            this.showNotification('Form submitted successfully!', 'success');
+            
+            // Close modal after delay
+            setTimeout(() => {
+                this.closeModal(modal);
+                form.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                submitBtn.style.background = '';
+            }, 1500);
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            this.showNotification('Failed to submit form. Please try again.', 'error');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    showModal(modalId, options = {}) {
+        let modal = document.getElementById(modalId);
+        
+        if (!modal) {
+            // Create modal dynamically
+            modal = this.createModal(modalId, options);
+        }
+
+        // Setup modal if not already done
+        this.setupModal(modal);
+
+        // Show modal
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        
+        // Add to stack
+        this.modalStack.push(modal);
+        this.activeModal = modal;
+
+        // Add active class for animations
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
+
+        // Focus management
+        this.focusModal(modal);
+
+        // Manage body scroll
+        this.manageBodyScroll();
+
+        return modal;
+    }
+
+    closeModal(modal) {
+        if (!modal) return;
+
+        // Remove active class
+        modal.classList.remove('active');
+
+        // Hide modal after animation
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }, 300);
+
+        // Remove from stack
+        this.modalStack = this.modalStack.filter(m => m !== modal);
+        this.activeModal = this.modalStack[this.modalStack.length - 1] || null;
+
+        // Restore focus
+        this.restoreFocus();
+
+        // Manage body scroll
+        this.manageBodyScroll();
+    }
+
+    createModal(modalId, options) {
+        const {
+            title = 'Modal',
+            content = '',
+            className = '',
+            showClose = true,
+            showOverlay = true
+        } = options;
+
+        const modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = `modal-overlay ${className}`;
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-hidden', 'true');
+
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>${title}</h2>
+                    ${showClose ? '<button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>' : ''}
+                </div>
+                <div class="modal-body">
+                    ${content}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        return modal;
+    }
+
+    focusModal(modal) {
+        // Focus first focusable element
+        const focusableElements = modal.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length > 0) {
+            focusableElements[0].focus();
+        }
+    }
+
+    restoreFocus() {
+        // Restore focus to the element that had focus before modal opened
+        if (this.previousFocus) {
+            this.previousFocus.focus();
+            this.previousFocus = null;
+        }
+    }
+
+    manageBodyScroll() {
+        const hasOpenModal = this.modalStack.length > 0;
+        
+        if (hasOpenModal) {
+            document.body.classList.add('modal-open');
+            document.documentElement.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+            document.documentElement.classList.remove('modal-open');
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'assertive');
+        
+        const iconMap = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            info: 'info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${iconMap[type]}" aria-hidden="true"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // Auto-remove
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 400);
+        }, 5000);
+    }
+}
+
+// Initialize modal system
+const modalSystem = new ModalSystem();
+
+// Global functions for backward compatibility
+window.showModal = (modalId, options) => modalSystem.showModal(modalId, options);
+window.closeModal = (modal) => modalSystem.closeModal(modal);
+window.showSubscribeModal = () => modalSystem.showModal('subscribe-modal');

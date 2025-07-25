@@ -719,101 +719,7 @@ body {
     letter-spacing: 0.01em;
 }
 
-/* Premium Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg-overlay);
-    backdrop-filter: blur(12px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: var(--z-modal);
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-normal);
-    padding: var(--space-6);
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background: var(--gradient-card);
-    border-radius: var(--radius-3xl);
-    max-width: 520px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transform: scale(0.9) translateY(20px);
-    transition: transform var(--transition-bounce);
-    position: relative;
-    backdrop-filter: blur(20px);
-}
-
-.modal-overlay.active .modal-content {
-    transform: scale(1) translateY(0);
-}
-
-.modal-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-accent);
-    border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
-}
-
-.modal-header {
-    padding: var(--space-8);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: var(--text-2xl);
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-}
-
-.modal-close {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    font-size: var(--text-xl);
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: var(--space-2);
-    border-radius: var(--radius-full);
-    transition: all var(--transition-normal);
-    line-height: 1;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-}
-
-.modal-close:hover {
+/* Modal styles are now unified in main style.css */
     background: rgba(220, 38, 38, 0.1);
     border-color: rgba(220, 38, 38, 0.2);
     color: #dc2626;
@@ -822,6 +728,9 @@ body {
 
 .modal-body {
     padding: var(--space-8);
+    flex: 1; /* Take up remaining space */
+    overflow-y: auto; /* Allow scrolling within modal body */
+    min-height: 0; /* Allow flex item to shrink */
 }
 
 .subscribe-content {
@@ -1342,6 +1251,13 @@ body {
 body.modal-open {
     overflow: hidden;
     padding-right: var(--scrollbar-width, 0);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+html.modal-open {
+    overflow: hidden;
 }
 
 /* Smooth scrollbar styling */
@@ -1820,3 +1736,139 @@ body.modal-open {
 }
 
 /* End of enhanced blog styles */
+
+/* --- Force blog nav bar to match main site exactly --- */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(17, 17, 17, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  z-index: 100;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  transition: background-color 0.35s ease-out;
+}
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 85px !important;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  height: 45px !important;
+  width: auto;
+  max-width: 280px;
+  transition: transform 0.2s ease-out;
+}
+.logo:hover .logo-img {
+  transform: scale(1.05);
+}
+.nav-links-container {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  background: none !important;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-link {
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.35s ease-out;
+  background: none !important;
+}
+.nav-link.active,
+.nav-link:hover {
+  color: #FF8533 !important;
+}
+
+/* Remove all custom blog styles from the Get Started button */
+.nav-link.btn,
+.nav-link.btn-primary,
+.nav-link.btn-outline,
+.nav-link.btn-primary:hover,
+.nav-link.btn-outline:hover,
+.nav-link.btn:focus,
+.nav-link.btn-primary:focus,
+.nav-link.btn-outline:focus {
+  all: unset;
+  /* Reset all blog.css styles */
+  background: var(--accent-color) !important;
+  color: var(--bg-white) !important;
+  margin-left: 1rem !important;
+  border-radius: 0.3rem !important;
+  padding: 0.6rem 1.2rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  border: 1.5px solid var(--accent-color) !important;
+  box-sizing: border-box !important;
+  transition: color 0.35s, background 0.35s, border 0.35s !important;
+}
+
+.nav-link.btn-outline {
+  background: none !important;
+  color: var(--accent-color) !important;
+}
+
+.nav-link.btn-outline:hover {
+  background: var(--accent-color) !important;
+  color: var(--bg-white) !important;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #FF6600;
+  transition: width 0.35s ease-out;
+  border-radius: 1px;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+.mobile-menu-toggle {
+  color: #fff !important;
+}
+
+/* Remove any gradient or background effect from nav links in the nav bar */
+.nav-link,
+.nav-link:visited,
+.nav-link.active,
+.nav-link:hover {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+}
+
+.nav-link::before,
+.nav-link::after,
+.nav-link.active::before,
+.nav-link.active::after,
+.nav-link:hover::before,
+.nav-link:hover::after {
+  background: none !important;
+  background-image: none !important;
+}

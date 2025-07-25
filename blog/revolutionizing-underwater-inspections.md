@@ -40,7 +40,7 @@ MarineStream supports a diverse array of underwater work scopes—from commercia
 | **Servicing / Maintenance** | Helmets | Commercial Dive Helmet |
 | **Other** | N/A | Free text input form for custom user needs |
 
-The MarineStream platform, developed in-house by CTO Mat Harvey, is a visual inspection tool that allows uploading photos and videos, tagging to locations, report generation, and live streaming—tailored for real-time offshore inspections. “It’s tightly integrated with hardware like Deep Trekker ROVs, including the REVOLUTION and PIVOT systems,” said Harvey. “We require vehicles that support video requirements and sensor overlays like sonar and positioning for full traceability.”
+The MarineStream platform, is a visual inspection tool that allows uploading photos and videos, tagging to locations, report generation, and live streaming—tailored for real-time offshore inspections. “It’s tightly integrated with hardware like Deep Trekker ROVs, including the REVOLUTION and PIVOT systems,” said Harvey. “We require vehicles that support video requirements and sensor overlays like sonar and positioning for full traceability.”
 
 CEO Adam Falconer-West describes this as vital for modern demands: “Ports face tighter turnaround times, environmental scrutiny, and in-water servicing needs. Our digital platform and hardware integrations make a real difference.”
 
