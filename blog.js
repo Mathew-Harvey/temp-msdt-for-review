@@ -773,3 +773,216 @@ function hideFullArticleModal() {
 
 // --- Unified Modal System Integration ---
 // All auto-popup and cookie logic removed - modal only shows on user request
+
+// Initialize subscribe modal functionality
+document.addEventListener('DOMContentLoaded', function() {
+    initSubscribeModal();
+});
+
+/**
+ * Initialize subscribe modal functionality
+ */
+function initSubscribeModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    const subscribeForm = document.getElementById('subscribe-form');
+    const subscribeCloseBtn = document.querySelector('.subscribe-close-btn');
+    const subscribeCancelBtn = document.querySelector('.subscribe-cancel-btn');
+    
+    if (!subscribeModal || !subscribeForm) return;
+    
+    // Handle form submission
+    subscribeForm.addEventListener('submit', handleSubscribeSubmit);
+    
+    // Handle close button
+    if (subscribeCloseBtn) {
+        subscribeCloseBtn.addEventListener('click', () => {
+            hideSubscribeModal();
+        });
+    }
+    
+    // Handle cancel button
+    if (subscribeCancelBtn) {
+        subscribeCancelBtn.addEventListener('click', () => {
+            hideSubscribeModal();
+        });
+    }
+    
+    // Close modal when clicking outside
+    subscribeModal.addEventListener('click', (e) => {
+        if (e.target === subscribeModal) {
+            hideSubscribeModal();
+        }
+    });
+    
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && subscribeModal.style.display === 'flex') {
+            hideSubscribeModal();
+        }
+    });
+}
+
+/**
+ * Show the subscription modal
+ */
+function showSubscribeModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    if (subscribeModal) {
+        subscribeModal.style.display = 'flex';
+        subscribeModal.classList.add('active');
+        document.body.classList.add('modal-open');
+        document.documentElement.classList.add('modal-open');
+        
+        // Focus on first input
+        const firstInput = subscribeModal.querySelector('input[type="email"]');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
+    }
+}
+
+/**
+ * Hide the subscription modal
+ */
+function hideSubscribeModal() {
+    const subscribeModal = document.getElementById('subscribe-modal');
+    if (subscribeModal) {
+        subscribeModal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+        document.documentElement.classList.remove('modal-open');
+        setTimeout(() => {
+            subscribeModal.style.display = 'none';
+        }, 300);
+    }
+}
+
+/**
+ * Handle subscription form submission
+ */
+async function handleSubscribeSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('.subscribe-submit-btn');
+    const formData = new FormData(form);
+    
+    // Show loading state
+    form.classList.add('loading');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    
+    try {
+        // Validate email
+        const email = formData.get('email');
+        if (!email || !isValidEmail(email)) {
+            throw new Error('Please enter a valid email address');
+        }
+        
+        // Validate consent
+        const consent = formData.get('subscribe-consent');
+        if (!consent) {
+            throw new Error('Please agree to receive email updates');
+        }
+        
+        // Prepare data
+        const data = {
+            email: email,
+            name: formData.get('name') || null,
+            company: formData.get('company') || null,
+            role: formData.get('role') || null
+        };
+        
+        // Send to backend
+        const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            // Show success message
+            showSubscribeSuccess();
+            form.reset();
+            
+            // Hide modal after 3 seconds
+            setTimeout(() => {
+                hideSubscribeModal();
+            }, 3000);
+        } else {
+            throw new Error(result.message || 'Subscription failed. Please try again.');
+        }
+        
+    } catch (error) {
+        console.error('Subscription error:', error);
+        showSubscribeError(error.message || 'An error occurred. Please try again.');
+    } finally {
+        // Remove loading state
+        form.classList.remove('loading');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+    }
+}
+
+/**
+ * Show subscription success message
+ */
+function showSubscribeSuccess() {
+    const modalBody = document.querySelector('.subscribe-modal-body');
+    if (modalBody) {
+        modalBody.innerHTML = `
+            <div class="subscribe-success">
+                <div class="subscribe-success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Successfully Subscribed!</h3>
+                <p>Thank you for subscribing to MarineStream updates. You'll receive our latest maritime insights and industry updates soon.</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Show subscription error message
+ */
+function showSubscribeError(message) {
+    const modalBody = document.querySelector('.subscribe-modal-body');
+    if (modalBody) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'subscribe-error';
+        errorDiv.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        // Insert error message at the top of the form
+        const form = modalBody.querySelector('.subscribe-form');
+        if (form) {
+            form.insertBefore(errorDiv, form.firstChild);
+            
+            // Remove error message after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+    }
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Make functions globally available
+window.showSubscribeModal = showSubscribeModal;
+window.hideSubscribeModal = hideSubscribeModal;

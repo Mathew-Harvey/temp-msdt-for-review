@@ -3,6 +3,12 @@
   --accent-color: #FF6600;       /* Primary Orange */
   --accent-dark: #E05A00;       /* Darker Orange */
   --accent-light: #FF8533;      /* Lighter Orange */
+  --accent-color-rgb: 255, 102, 0;  /* RGB values for gradients */
+  
+  /* Primary colors for gradients */
+  --primary-color: #1e40af;
+  --primary-dark: #1e3a8a;
+  --primary-color-rgb: 30, 64, 175;  /* RGB values for gradients */
 
   --text-dark: #050505;          /* Near Black for primary text */
   --text-medium: #333333;
@@ -1227,81 +1233,464 @@ html.modal-open {
 }
 
 /* Subscribe Modal Specific Styles */
+.subscribe-modal-content {
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.subscribe-modal-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+  border-radius: 20px 20px 0 0;
+  padding: 2rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subscribe-logo {
+  display: flex;
+  align-items: center;
+}
+
+.subscribe-logo-img {
+  height: 40px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.subscribe-logo-img:hover {
+  transform: scale(1.05);
+}
+
+.subscribe-modal-body {
+  padding: 2.5rem;
+}
+
 .subscribe-content {
   text-align: center;
 }
 
 .subscribe-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: var(--accent-color);
-  margin-bottom: var(--space-lg);
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
 }
 
-.subscribe-content h3 {
-  font-size: var(--text-xl);
+.subscribe-title {
+  font-size: 2rem;
   color: var(--text-primary);
-  margin-bottom: var(--space-md);
-  font-weight: 600;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.subscribe-content p {
+.subscribe-description {
   color: var(--text-secondary);
-  margin-bottom: var(--space-xl);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+.subscribe-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.benefit-item i {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+}
+
+.benefit-item span {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.subscribe-form {
+  text-align: left;
+}
+
+.subscribe-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.subscribe-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.subscribe-form .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.subscribe-form .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.subscribe-form .form-control {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: var(--text-primary);
+}
+
+.subscribe-form .form-control:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.1);
+  transform: translateY(-1px);
+}
+
+.subscribe-form .form-control:focus + .input-icon {
+  color: var(--accent-color);
+}
+
+.subscribe-form select.form-control {
+  padding-left: 3rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 3rem;
+}
+
+.subscribe-form .checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.subscribe-form .checkbox-label input[type="checkbox"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-color);
+}
+
+.subscribe-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.subscribe-submit-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.subscribe-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--accent-color-rgb), 0.4);
+}
+
+.subscribe-submit-btn:active {
+  transform: translateY(0);
+}
+
+.subscribe-submit-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.subscribe-submit-btn.loading span {
+  opacity: 0;
+}
+
+.subscribe-submit-btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.subscribe-cancel-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.subscribe-cancel-btn:hover {
+  background: #f8fafc;
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+/* Loading and Success States */
+.subscribe-form.loading .form-control {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.subscribe-success {
+  text-align: center;
+  padding: 2rem;
+}
+
+.subscribe-success-icon {
+  font-size: 4rem;
+  color: #10b981;
+  margin-bottom: 1rem;
+  animation: bounceIn 0.6s ease;
+}
+
+.subscribe-success h3 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.subscribe-success p {
+  color: var(--text-secondary);
   line-height: 1.6;
+}
+
+/* Error States */
+.subscribe-error {
+  margin-bottom: 1rem;
+}
+
+.subscribe-error .error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  animation: slideInDown 0.3s ease;
+}
+
+.subscribe-error .error-message i {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .modal-content {
-    margin: var(--space-md);
-    max-width: none;
-    width: calc(100% - var(--space-md) * 2);
+  .subscribe-modal-content {
+    width: 95%;
+    margin: 1rem;
+    max-height: 95vh;
   }
   
-  .modal-header {
-    padding: var(--space-lg);
+  .subscribe-modal-header {
+    padding: 1.5rem;
   }
   
-  .modal-body {
-    padding: var(--space-lg);
+  .subscribe-modal-body {
+    padding: 1.5rem;
   }
   
-  .form-actions {
+  .subscribe-title {
+    font-size: 1.5rem;
+  }
+  
+  .subscribe-description {
+    font-size: 1rem;
+  }
+  
+  .subscribe-benefits {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .benefit-item {
+    padding: 0.75rem;
+  }
+  
+  .subscribe-form .form-actions {
     flex-direction: column;
   }
   
-  .notification {
-    top: var(--space-md);
-    right: var(--space-md);
-    left: var(--space-md);
-    max-width: none;
+  .subscribe-submit-btn,
+  .subscribe-cancel-btn {
+    width: 100%;
+    min-width: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .modal-content {
-    margin: var(--space-sm);
-    width: calc(100% - var(--space-sm) * 2);
+  .subscribe-modal-content {
+    width: 98%;
+    margin: 0.5rem;
+    border-radius: 15px;
   }
   
-  .modal-header {
-    padding: var(--space-md);
+  .subscribe-modal-header {
+    padding: 1rem;
+    border-radius: 15px 15px 0 0;
   }
   
-  .modal-body {
-    padding: var(--space-md);
+  .subscribe-modal-body {
+    padding: 1rem;
   }
   
-  .modal-header h2 {
-    font-size: var(--text-lg);
+  .subscribe-logo-img {
+    height: 30px;
   }
   
-  .subscribe-content h3 {
-    font-size: var(--text-lg);
+  .subscribe-icon {
+    font-size: 2.5rem;
   }
   
-  .subscribe-content p {
-    font-size: var(--text-sm);
+  .subscribe-title {
+    font-size: 1.25rem;
+  }
+  
+  .subscribe-description {
+    font-size: 0.9rem;
+  }
+  
+  .subscribe-benefits {
+    margin-bottom: 1.5rem;
+  }
+  
+  .benefit-item {
+    font-size: 0.85rem;
+  }
+  
+  .subscribe-form .form-control {
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .subscribe-form .input-icon {
+    left: 0.75rem;
+    font-size: 0.9rem;
   }
 }
 

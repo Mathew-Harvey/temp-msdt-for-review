@@ -1180,53 +1180,83 @@
     </div>
     <!-- End of BFMP Information Modal -->
 
-    <!-- Email Subscription Modal -->
+    <!-- Enhanced Subscribe Modal -->
     <div id="subscribe-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-envelope"></i> Stay Updated with MarineStream</h2>
-                <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
+        <div class="modal-content subscribe-modal-content">
+            <div class="modal-header subscribe-modal-header">
+                <div class="subscribe-logo">
+                    <img src="./assets/marinestream_logo_blue.png" alt="MarineStream Logo" class="subscribe-logo-img">
+                </div>
+                <button class="modal-close subscribe-close-btn" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body subscribe-modal-body">
                 <div class="subscribe-content">
                     <div class="subscribe-icon">
-                        <i class="fas fa-newspaper"></i>
+                        <i class="fas fa-envelope-open-text"></i>
                     </div>
-                    <h3>Get the Latest Maritime Insights</h3>
-                    <p>Subscribe to our newsletter for industry updates, technical insights, and exclusive content about
-                        biofouling management and maritime asset optimization.</p>
+                    <h3 class="subscribe-title">Stay Connected with MarineStream</h3>
+                    <p class="subscribe-description">Get exclusive access to maritime insights, industry updates, and technical expertise delivered directly to your inbox.</p>
+                    
+                    <div class="subscribe-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Industry Trends & Analysis</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-tools"></i>
+                            <span>Technical Insights & Tips</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Exclusive Event Invitations</span>
+                        </div>
+                    </div>
 
                     <form id="subscribe-form" class="subscribe-form">
                         <div class="form-group">
                             <label for="subscribe-email">Email Address *</label>
-                            <input type="email" id="subscribe-email" name="email" required
-                                placeholder="your.email@company.com" class="form-control">
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="subscribe-email" name="email" required
+                                    placeholder="your.email@company.com" class="form-control">
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="subscribe-name">Full Name</label>
-                            <input type="text" id="subscribe-name" name="name" placeholder="Your full name"
-                                class="form-control">
+                            <div class="input-wrapper">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="subscribe-name" name="name" placeholder="Your full name"
+                                    class="form-control">
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="subscribe-company">Company</label>
-                            <input type="text" id="subscribe-company" name="company" placeholder="Your company name"
-                                class="form-control">
+                            <div class="input-wrapper">
+                                <i class="fas fa-building input-icon"></i>
+                                <input type="text" id="subscribe-company" name="company" placeholder="Your company name"
+                                    class="form-control">
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="subscribe-role">Role</label>
-                            <select id="subscribe-role" name="role" class="form-control">
-                                <option value="">Select your role</option>
-                                <option value="Fleet Manager">Fleet Manager</option>
-                                <option value="Technical Manager">Technical Manager</option>
-                                <option value="Operations Manager">Operations Manager</option>
-                                <option value="Marine Superintendent">Marine Superintendent</option>
-                                <option value="Port Manager">Port Manager</option>
-                                <option value="Consultant">Consultant</option>
-                                <option value="Other">Other</option>
-                            </select>
+                            <div class="input-wrapper">
+                                <i class="fas fa-briefcase input-icon"></i>
+                                <select id="subscribe-role" name="role" class="form-control">
+                                    <option value="">Select your role</option>
+                                    <option value="Fleet Manager">Fleet Manager</option>
+                                    <option value="Technical Manager">Technical Manager</option>
+                                    <option value="Operations Manager">Operations Manager</option>
+                                    <option value="Marine Superintendent">Marine Superintendent</option>
+                                    <option value="Port Manager">Port Manager</option>
+                                    <option value="Consultant">Consultant</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -1238,11 +1268,9 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Subscribe Now
-                            </button>
-                            <button type="button" class="btn btn-secondary subscribe-close-btn">
-                                Maybe Later
+                            <button type="submit" class="btn btn-primary subscribe-submit-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Subscribe Now</span>
                             </button>
                         </div>
                     </form>
