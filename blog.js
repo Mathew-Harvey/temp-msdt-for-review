@@ -435,9 +435,16 @@ async function parseMarkdownWithImages(markdown, articleId) {
     };
     
     renderer.table = function(header, body) {
-        // Handle different marked.js versions - parameters might be objects
-        const tableHeader = typeof header === 'string' ? header : (header && (header.header || header.text || '')) || '';
-        const tableBody = typeof body === 'string' ? body : (body && (body.body || body.text || '')) || '';
+        // Debug logging to understand what we're receiving
+        console.log('Table renderer called with:', { header, body });
+        console.log('header type:', typeof header, 'body type:', typeof body);
+        
+        // Convert parameters to strings safely
+        const tableHeader = String(header || '');
+        const tableBody = String(body || '');
+        
+        console.log('Processed table header:', tableHeader);
+        console.log('Processed table body:', tableBody);
         
         return `
             <div class="table-wrapper">
